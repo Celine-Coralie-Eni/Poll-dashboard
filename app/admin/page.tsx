@@ -1,0 +1,193 @@
+"use client";
+
+import { Navigation } from "@/components/Navigation";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+interface Stats {
+  totalUsers: number;
+  totalPolls: number;
+  totalVotes: number;
+  recentPolls: Array<{
+    id: string;
+    title: string;
+    createdAt: string;
+    _count: { votes: number };
+  }>;
+}
+
+export default function AdminPage() {
+  const { data: session } = useSession();
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/admin/stats');
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        } else {
+          console.error('Failed to fetch admin stats');
+          // Fallback to empty stats if API fails
+          setStats({
+            totalUsers: 0,
+            totalPolls: 0,
+            totalVotes: 0,
+            recentPolls: [],
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching admin stats:', error);
+        // Fallback to empty stats if API fails
+        setStats({
+          totalUsers: 0,
+          totalPolls: 0,
+          totalVotes: 0,
+          recentPolls: [],
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  // Redirect if not admin
+  if (session?.user?.role !== "ADMIN") {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
+            <p className="mb-4">
+              You need admin privileges to access this page.
+            </p>
+            <Link href="/" className="btn btn-primary">
+              Go Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-center items-center min-h-[50vh]">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen">
+      <Navigation />
+
+      <main className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body text-center">
+              <div className="text-4xl mb-2">👥</div>
+              <h3 className="card-title justify-center">Total Users</h3>
+              <p className="text-3xl font-bold text-primary">
+                {stats?.totalUsers}
+              </p>
+            </div>
+          </div>
+
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body text-center">
+              <div className="text-4xl mb-2">📊</div>
+              <h3 className="card-title justify-center">Total Polls</h3>
+              <p className="text-3xl font-bold text-primary">
+                {stats?.totalPolls}
+              </p>
+            </div>
+          </div>
+
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body text-center">
+              <div className="text-4xl mb-2">🗳️</div>
+              <h3 className="card-title justify-center">Total Votes</h3>
+              <p className="text-3xl font-bold text-primary">
+                {stats?.totalVotes}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="card bg-base-100 shadow-xl mb-8">
+          <div className="card-body">
+            <h2 className="card-title text-2xl mb-6">Quick Actions</h2>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/polls/create" className="btn btn-primary">
+                Create New Poll
+              </Link>
+              <button className="btn btn-outline">Export Results</button>
+              <button className="btn btn-outline">Manage Users</button>
+              <button className="btn btn-outline">View Analytics</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Polls */}
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title text-2xl mb-6">Recent Polls</h2>
+            <div className="overflow-x-auto">
+              <table className="table table-zebra">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Created</th>
+                    <th>Votes</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats?.recentPolls.map((poll) => (
+                    <tr key={poll.id}>
+                      <td className="font-medium">{poll.title}</td>
+                      <td>{new Date(poll.createdAt).toLocaleDateString()}</td>
+                      <td>{poll._count.votes}</td>
+                      <td>
+                        <div className="flex gap-2">
+                          <Link
+                            href={`/polls/${poll.id}`}
+                            className="btn btn-sm btn-outline"
+                          >
+                            View
+                          </Link>
+                          <button className="btn btn-sm btn-outline">
+                            Edit
+                          </button>
+                          <button className="btn btn-sm btn-error">
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
