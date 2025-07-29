@@ -14,7 +14,10 @@ This guide explains how to set up OAuth authentication with Google and GitHub fo
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
-3. Enable the Google+ API for your project
+3. Enable the Google OAuth2 API for your project:
+   - Navigate to "APIs & Services" > "Library"
+   - Search for "Google+ API" and enable it (this provides OAuth functionality)
+   - Alternatively, search for "People API" if you need profile information
 
 ### 2. Configure OAuth Consent Screen
 
