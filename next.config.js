@@ -9,11 +9,6 @@ const nextConfig = {
     domains: ["localhost"],
     formats: ['image/webp', 'image/avif'],
   },
-  // Environment variables
-  env: {
-    TOLGEE_API_KEY: process.env.TOLGEE_API_KEY,
-    TOLGEE_API_URL: process.env.TOLGEE_API_URL,
-  },
   // Enable compression
   compress: true,
   // Optimize builds

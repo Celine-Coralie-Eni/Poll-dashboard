@@ -25,10 +25,13 @@ export const Navigation = memo(function Navigation() {
     setIsLangMenuOpen(!isLangMenuOpen);
   }, [isLangMenuOpen]);
 
-  const handleLanguageChange = useCallback((code: string) => {
-    i18n.changeLanguage(code);
-    setIsLangMenuOpen(false);
-  }, [i18n]);
+  const handleLanguageChange = useCallback(
+    (code: string) => {
+      i18n.changeLanguage(code as Language);
+      setIsLangMenuOpen(false);
+    },
+    [i18n]
+  );
 
   return (
     <div className="navbar bg-base-100 shadow-lg">
@@ -61,18 +64,18 @@ export const Navigation = memo(function Navigation() {
             >
               <li>
                 <Link href="/" onClick={() => setIsMenuOpen(false)}>
-                  {t("home")}
+                  {t("home", "Home")}
                 </Link>
               </li>
               <li>
                 <Link href="/polls" onClick={() => setIsMenuOpen(false)}>
-                  {t("polls")}
+                  {t("polls", "Polls")}
                 </Link>
               </li>
               {session?.user?.role === "ADMIN" && (
                 <li>
                   <Link href="/admin" onClick={() => setIsMenuOpen(false)}>
-                    {t("admin")}
+                    {t("admin", "Admin")}
                   </Link>
                 </li>
               )}
@@ -80,21 +83,21 @@ export const Navigation = memo(function Navigation() {
           )}
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
-          📊 {t("pollDashboard")}
+          📊 {t("poll_dashboard", "Poll Dashboard")}
         </Link>
       </div>
 
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link href="/">{t("home")}</Link>
+            <Link href="/">{t("home", "Home")}</Link>
           </li>
           <li>
-            <Link href="/polls">{t("polls")}</Link>
+            <Link href="/polls">{t("polls", "Polls")}</Link>
           </li>
           {session?.user?.role === "ADMIN" && (
             <li>
-              <Link href="/admin">{t("admin")}</Link>
+              <Link href="/admin">{t("admin", "Admin")}</Link>
             </li>
           )}
         </ul>
@@ -124,10 +127,12 @@ export const Navigation = memo(function Navigation() {
                     <button
                       onClick={() => handleLanguageChange(code)}
                       className={`text-sm ${
-                        i18n.language === code ? "bg-primary text-primary-content" : ""
+                        i18n.language === code
+                          ? "bg-primary text-primary-content"
+                          : ""
                       }`}
                     >
-                      {name}
+                      {name as string}
                     </button>
                   </li>
                 ))}
@@ -180,20 +185,20 @@ export const Navigation = memo(function Navigation() {
                   </div>
                 </li>
                 <li>
-                  <Link href="/profile">{t("profile")}</Link>
+                  <Link href="/profile">{t("profile", "Profile")}</Link>
                 </li>
                 <li>
-                  <button onClick={handleSignOut}>{t("logout")}</button>
+                  <button onClick={handleSignOut}>{t("logout", "Logout")}</button>
                 </li>
               </ul>
             </div>
           ) : (
             <div className="flex gap-2">
               <Link href="/auth/login" className="btn btn-ghost">
-                {t("login")}
+                {t("login", "Login")}
               </Link>
               <Link href="/auth/register" className="btn btn-primary">
-                {t("register")}
+                {t("register", "Register")}
               </Link>
             </div>
           )}

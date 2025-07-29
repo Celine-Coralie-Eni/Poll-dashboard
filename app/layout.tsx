@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { TolgeeAppProvider } from "@/lib/tolgee-optimized";
 import { SessionProvider } from "@/components/SessionProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster, ToasterProvider } from "@/components/Toaster";
+import { TolgeeAppProvider } from "@/lib/tolgee-optimized";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,8 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} ${inter.variable}`}>
-        <TolgeeAppProvider>
-          <SessionProvider>
+        <SessionProvider>
+          <TolgeeAppProvider>
             <ThemeProvider>
               <ToasterProvider>
                 <div className="min-h-screen bg-base-100">
@@ -36,8 +36,8 @@ export default function RootLayout({
                 </div>
               </ToasterProvider>
             </ThemeProvider>
-          </SessionProvider>
-        </TolgeeAppProvider>
+          </TolgeeAppProvider>
+        </SessionProvider>
       </body>
     </html>
   );

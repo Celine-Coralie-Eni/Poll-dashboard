@@ -140,9 +140,6 @@ temp/
 docker-compose.override.yml
 .docker/
 
-# Tolgee
-tolgee/
-.tolgee/
 
 # NextAuth
 .auth/
@@ -213,3 +210,6 @@ coverage/
 
 # Contentlayer
 .contentlayer
+# Tolgee
+tolgee/
+.tolgee/
