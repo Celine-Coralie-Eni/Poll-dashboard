@@ -1,20 +1,63 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, createContext, useContext, useState, useEffect } from 'react';
 
-// Language definitions
+// Import translation files
+import enTranslations from './translations/en.json';
+import frTranslations from './translations/fr.json';
+
+// Language definitions - only French and English
 export const languages = {
   en: 'English',
-  es: 'Español',
   fr: 'Français',
-  de: 'Deutsch',
 };
 
 export type Language = keyof typeof languages;
 
-// Simple Provider component that just passes through children
+// Translation data
+const translations = {
+  en: enTranslations,
+  fr: frTranslations,
+};
+
+// Context for language state
+interface LanguageContextType {
+  currentLanguage: Language;
+  setCurrentLanguage: (lang: Language) => void;
+}
+
+const LanguageContext = createContext<LanguageContextType>({
+  currentLanguage: 'en',
+  setCurrentLanguage: () => {},
+});
+
+// Provider component
 export const TolgeeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  return <>{children}</>;
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
+
+  // Load language from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('language') as Language;
+      if (savedLanguage && languages[savedLanguage]) {
+        setCurrentLanguage(savedLanguage);
+      }
+    }
+  }, []);
+
+  // Save language to localStorage when it changes
+  const handleLanguageChange = (lang: Language) => {
+    setCurrentLanguage(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', lang);
+    }
+  };
+
+  return (
+    <LanguageContext.Provider value={{ currentLanguage, setCurrentLanguage: handleLanguageChange }}>
+      {children}
+    </LanguageContext.Provider>
+  );
 };
 
 // App Provider (alias for compatibility)
@@ -22,19 +65,16 @@ export const TolgeeAppProvider = TolgeeProvider;
 
 // Custom hook for translations
 export const useTranslations = () => {
-  const [currentLanguage, setCurrentLanguage] = React.useState<Language>('en');
+  const { currentLanguage, setCurrentLanguage } = useContext(LanguageContext);
 
-  const t = (key: string, defaultValue?: string, params?: Record<string, any>) => {
-    // Simple fallback translation function - return default value if provided, otherwise key
-    return defaultValue || key;
+  const t = (key: string, defaultValue?: string) => {
+    const translation = translations[currentLanguage][key as keyof typeof translations[typeof currentLanguage]];
+    return translation || defaultValue || key;
   };
 
   const i18n = {
     changeLanguage: (lang: Language) => {
       setCurrentLanguage(lang);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('language', lang);
-      }
     },
     language: currentLanguage,
   };

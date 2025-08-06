@@ -4,11 +4,13 @@ import { Navigation } from "@/components/Navigation";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "@/lib/tolgee-optimized";
 import Link from "next/link";
 
 export default function CreatePollPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { t } = useTranslations();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [options, setOptions] = useState(["React", "Vue", "Angular", "Svelte"]);
@@ -22,10 +24,10 @@ export default function CreatePollPage() {
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Authentication Required</h1>
-            <p className="mb-4">You need to be logged in to create polls.</p>
+            <h1 className="text-2xl font-bold mb-4">{t('authentication_required', 'Authentication Required')}</h1>
+            <p className="mb-4">{t('need_login_create_polls', 'You need to be logged in to create polls.')}</p>
             <Link href="/auth/login" className="btn btn-primary">
-              Login
+              {t('login', 'Login')}
             </Link>
           </div>
         </div>
@@ -53,13 +55,13 @@ export default function CreatePollPage() {
     e.preventDefault();
 
     if (!title.trim()) {
-      setError("Poll title is required");
+      setError(t('poll_title_required', 'Poll title is required'));
       return;
     }
 
     const validOptions = options.filter((option) => option.trim());
     if (validOptions.length < 2) {
-      setError("At least 2 options are required");
+      setError(t('at_least_2_options', 'At least 2 options are required'));
       return;
     }
 
@@ -81,13 +83,13 @@ export default function CreatePollPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create poll");
+        throw new Error(errorData.error || t('failed_to_create_poll', 'Failed to create poll'));
       }
 
       const poll = await response.json();
       router.push(`/polls/${poll.id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create poll");
+      setError(err instanceof Error ? err.message : t('failed_to_create_poll', 'Failed to create poll'));
     } finally {
       setLoading(false);
     }
@@ -103,11 +105,10 @@ export default function CreatePollPage() {
             {/* Header Section */}
             <div className="bg-primary px-8 py-6 rounded-t-2xl">
               <h1 className="text-3xl font-bold text-primary-content mb-2">
-                Create New Poll
+                {t('create_new_poll', 'Create New Poll')}
               </h1>
               <p className="text-primary-content/90 text-lg">
-                Create a new poll and start collecting responses from your
-                audience.
+                {t('create_new_poll_desc', 'Create a new poll and start collecting responses from your audience.')}
               </p>
             </div>
 
@@ -117,11 +118,11 @@ export default function CreatePollPage() {
                 {/* Poll Title */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">Poll Title</span>
+                    <span className="label-text font-semibold">{t('poll_title_label', 'Poll Title')}</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="What's your question?"
+                    placeholder={t('poll_title_placeholder', "What's your question?")}
                     className="input input-bordered input-primary w-full"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -132,10 +133,10 @@ export default function CreatePollPage() {
                 {/* Description */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">Description (Optional)</span>
+                    <span className="label-text font-semibold">{t('description_optional', 'Description (Optional)')}</span>
                   </label>
                   <textarea
-                    placeholder="Add more context to your poll..."
+                    placeholder={t('description_placeholder', 'Add more context to your poll...')}
                     className="textarea textarea-bordered textarea-primary resize-none"
                     rows={3}
                     value={description}
@@ -146,14 +147,14 @@ export default function CreatePollPage() {
                 {/* Poll Options */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">Poll Options</span>
+                    <span className="label-text font-semibold">{t('poll_options', 'Poll Options')}</span>
                   </label>
                   <div className="space-y-3">
                     {options.map((option, index) => (
                       <div key={index} className="flex gap-3">
                         <input
                           type="text"
-                          placeholder="Enter option text..."
+                          placeholder={t('option_placeholder', 'Enter option text...')}
                           className="input input-bordered input-primary flex-1"
                           value={option}
                           onChange={(e) => updateOption(index, e.target.value)}
@@ -165,7 +166,7 @@ export default function CreatePollPage() {
                             onClick={() => removeOption(index)}
                             className="btn btn-outline btn-error"
                           >
-                            Remove
+                            {t('remove', 'Remove')}
                           </button>
                         )}
                       </div>
@@ -176,8 +177,8 @@ export default function CreatePollPage() {
                   <div className="flex gap-3 mt-3">
                     <input
                       type="text"
-                      placeholder="Add new option..."
-                      className="input input-bordered input-primary flex-1"
+                      placeholder={t('add_new_option_placeholder', 'Add new option...')}
+                      className="input input-bordered input-primary flex-1 add-new-option-input"
                       onKeyPress={(e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
@@ -195,7 +196,7 @@ export default function CreatePollPage() {
                       type="button"
                       onClick={() => {
                         const input = document.querySelector(
-                          'input[placeholder="Add new option..."]'
+                          '.add-new-option-input'
                         ) as HTMLInputElement;
                         const value = input?.value.trim();
                         if (value) {
@@ -226,10 +227,10 @@ export default function CreatePollPage() {
                     {loading ? (
                       <>
                         <span className="loading loading-spinner loading-sm"></span>
-                        Creating...
+                        {t('creating', 'Creating...')}
                       </>
                     ) : (
-                      "Create Poll"
+                      t('create_poll', 'Create Poll')
                     )}
                   </button>
                   <button
@@ -240,7 +241,7 @@ export default function CreatePollPage() {
                       console.log("Save as draft clicked");
                     }}
                   >
-                    Save as Draft
+                    {t('save_as_draft', 'Save as Draft')}
                   </button>
                 </div>
               </form>

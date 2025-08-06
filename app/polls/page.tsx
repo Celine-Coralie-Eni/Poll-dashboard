@@ -1,6 +1,7 @@
 "use client";
 
 import { Navigation } from "@/components/Navigation";
+import { useTranslations } from "@/lib/tolgee-optimized";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -24,6 +25,7 @@ interface Poll {
 
 export default function PollsPage() {
   const { data: session } = useSession();
+  const { t } = useTranslations();
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,12 +39,12 @@ export default function PollsPage() {
       setLoading(true);
       const response = await fetch("/api/polls");
       if (!response.ok) {
-        throw new Error("Failed to fetch polls");
+        throw new Error(t('failed_to_fetch_polls', 'Failed to fetch polls'));
       }
       const data = await response.json();
       setPolls(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : t('an_error_occurred', 'An error occurred'));
     } finally {
       setLoading(false);
     }
@@ -80,10 +82,10 @@ export default function PollsPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Polls</h1>
+          <h1 className="text-4xl font-bold">{t('polls', 'Polls')}</h1>
           {session && (
             <Link href="/polls/create" className="btn btn-primary">
-              Create Poll
+              {t('create_poll', 'Create Poll')}
             </Link>
           )}
         </div>
@@ -91,17 +93,17 @@ export default function PollsPage() {
         {polls.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📊</div>
-            <h2 className="text-2xl font-bold mb-4">No polls found</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('no_polls_found', 'No polls found')}</h2>
             <p className="text-lg opacity-75 mb-8">
-              No polls have been created yet. Be the first to create one!
+              {t('no_polls_created_yet', 'No polls have been created yet. Be the first to create one!')}
             </p>
             {session ? (
               <Link href="/polls/create" className="btn btn-primary">
-                Create Your First Poll
+                {t('create_your_first_poll', 'Create Your First Poll')}
               </Link>
             ) : (
               <Link href="/auth/login" className="btn btn-primary">
-                Login to Create Polls
+                {t('login_to_create_polls', 'Login to Create Polls')}
               </Link>
             )}
           </div>
@@ -112,7 +114,7 @@ export default function PollsPage() {
                 <div className="card-body">
                   <h3 className="card-title">{poll.title}</h3>
                   <p className="text-sm opacity-75">
-                    {poll.options.length} options • {poll._count.votes} votes
+                    {poll.options.length} {t('options', 'options')} • {poll._count.votes} {t('votes', 'votes')}
                   </p>
 
                   {/* Show top 3 options with percentages */}
@@ -148,7 +150,7 @@ export default function PollsPage() {
 
                     {poll.options.length > 3 && (
                       <p className="text-sm opacity-75">
-                        +{poll.options.length - 3} more options
+                        +{poll.options.length - 3} {t('more_options', 'more options')}
                       </p>
                     )}
                   </div>
@@ -158,14 +160,14 @@ export default function PollsPage() {
                       href={`/polls/${poll.id}`}
                       className="btn btn-primary btn-sm"
                     >
-                      Vote
+                      {t('vote', 'Vote')}
                     </Link>
                     {poll._count.votes > 0 && (
                       <Link
                         href={`/polls/${poll.id}/results`}
                         className="btn btn-secondary btn-sm"
                       >
-                        View Results
+                        {t('view_results', 'View Results')}
                       </Link>
                     )}
                   </div>

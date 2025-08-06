@@ -32,32 +32,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* {t('features', 'Features')} Section */}
       <section className="py-16 bg-base-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Features
+            {t('features', 'Features')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="card bg-base-200 shadow-xl">
               <div className="card-body text-center">
                 <div className="text-4xl mb-4">📊</div>
-                <h3 className="card-title justify-center">Create Polls</h3>
-                <p>Create engaging polls with multiple options and real-time results</p>
+                <h3 className="card-title justify-center">{t('create_polls', 'Create Polls')}</h3>
+                <p>{t('create_polls_desc', 'Create engaging polls with multiple options and real-time results')}</p>
               </div>
             </div>
             <div className="card bg-base-200 shadow-xl">
               <div className="card-body text-center">
                 <div className="text-4xl mb-4">⚡</div>
-                <h3 className="card-title justify-center">Real-time Results</h3>
-                <p>See results update instantly as votes come in with beautiful visualizations</p>
+                <h3 className="card-title justify-center">{t('real_time_results', 'Real-time Results')}</h3>
+                <p>{t('real_time_results_desc', 'See results update instantly as votes come in with beautiful visualizations')}</p>
               </div>
             </div>
             <div className="card bg-base-200 shadow-xl">
               <div className="card-body text-center">
                 <div className="text-4xl mb-4">🔒</div>
-                <h3 className="card-title justify-center">Secure Voting</h3>
-                <p>Secure voting system with duplicate vote prevention and session tracking</p>
+                <h3 className="card-title justify-center">{t('secure_voting', 'Secure Voting')}</h3>
+                <p>{t('secure_voting_desc', 'Secure voting system with duplicate vote prevention and session tracking')}</p>
               </div>
             </div>
           </div>
@@ -67,12 +67,12 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-16 bg-base-200">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to get started?</h2>
+          <h2 className="text-3xl font-bold mb-6">{t('ready_to_start', 'Ready to get started?')}</h2>
           <p className="text-lg mb-8 opacity-75">
-            Create your first poll and start collecting responses from your audience.
+            {t('ready_to_start_desc', 'Create your first poll and start collecting responses from your audience.')}
           </p>
           <Link href="/polls/create" className="btn btn-primary btn-lg">
-            Create Poll
+            {t('create_poll', 'Create Poll')}
           </Link>
         </div>
       </section>
