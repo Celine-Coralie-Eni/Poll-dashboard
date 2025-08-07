@@ -4,6 +4,7 @@ import { Navigation } from "@/components/Navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 interface Stats {
   totalUsers: number;
@@ -21,6 +22,7 @@ export default function AdminPage() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslations();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -63,12 +65,12 @@ export default function AdminPage() {
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
+            <h1 className="text-2xl font-bold mb-4">{t("access_denied")}</h1>
             <p className="mb-4">
-              You need admin privileges to access this page.
+              {t("need_admin_privileges")}
             </p>
             <Link href="/" className="btn btn-primary">
-              Go Home
+              {t("go_home")}
             </Link>
           </div>
         </div>
@@ -94,14 +96,14 @@ export default function AdminPage() {
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
+        <h1 className="text-4xl font-bold mb-8">{t("admin_dashboard")}</h1>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body text-center">
               <div className="text-4xl mb-2">👥</div>
-              <h3 className="card-title justify-center">Total Users</h3>
+              <h3 className="card-title justify-center">{t("total_users")}</h3>
               <p className="text-3xl font-bold text-primary">
                 {stats?.totalUsers}
               </p>
@@ -111,7 +113,7 @@ export default function AdminPage() {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body text-center">
               <div className="text-4xl mb-2">📊</div>
-              <h3 className="card-title justify-center">Total Polls</h3>
+              <h3 className="card-title justify-center">{t("total_polls")}</h3>
               <p className="text-3xl font-bold text-primary">
                 {stats?.totalPolls}
               </p>
@@ -121,7 +123,7 @@ export default function AdminPage() {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body text-center">
               <div className="text-4xl mb-2">🗳️</div>
-              <h3 className="card-title justify-center">Total Votes</h3>
+              <h3 className="card-title justify-center">{t("total_votes")}</h3>
               <p className="text-3xl font-bold text-primary">
                 {stats?.totalVotes}
               </p>
@@ -132,14 +134,23 @@ export default function AdminPage() {
         {/* Quick Actions */}
         <div className="card bg-base-100 shadow-xl mb-8">
           <div className="card-body">
-            <h2 className="card-title text-2xl mb-6">Quick Actions</h2>
+            <h2 className="card-title text-2xl mb-6">{t("quick_actions")}</h2>
             <div className="flex flex-wrap gap-4">
               <Link href="/polls/create" className="btn btn-primary">
-                Create New Poll
+                {t("create_new_poll")}
               </Link>
-              <button className="btn btn-outline">Export Results</button>
-              <button className="btn btn-outline">Manage Users</button>
-              <button className="btn btn-outline">View Analytics</button>
+              <button
+                className="btn btn-outline"
+                onClick={() => window.open('/api/admin/export?format=csv', '_blank')}
+              >
+                {t("export_results")}
+              </button>
+              <Link href="/admin/users" className="btn btn-outline">
+                {t("manage_users")}
+              </Link>
+              <Link href="/admin/analytics" className="btn btn-outline">
+                {t("view_analytics")}
+              </Link>
             </div>
           </div>
         </div>
@@ -147,15 +158,15 @@ export default function AdminPage() {
         {/* Recent Polls */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl mb-6">Recent Polls</h2>
+            <h2 className="card-title text-2xl mb-6">{t("recent_polls")}</h2>
             <div className="overflow-x-auto">
               <table className="table table-zebra">
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Created</th>
-                    <th>Votes</th>
-                    <th>Actions</th>
+                    <th>{t("title")}</th>
+                    <th>{t("created")}</th>
+                    <th>{t("votes")}</th>
+                    <th>{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -170,13 +181,13 @@ export default function AdminPage() {
                             href={`/polls/${poll.id}`}
                             className="btn btn-sm btn-outline"
                           >
-                            View
+                            {t("view")}
                           </Link>
                           <button className="btn btn-sm btn-outline">
-                            Edit
+                            {t("edit")}
                           </button>
                           <button className="btn btn-sm btn-error">
-                            Delete
+                            {t("delete")}
                           </button>
                         </div>
                       </td>
