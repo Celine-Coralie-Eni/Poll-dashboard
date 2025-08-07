@@ -4,14 +4,13 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import { useState, memo, useCallback } from "react";
-import { useTranslations, languages, Language } from "@/lib/tolgee-optimized";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 export const Navigation = memo(function Navigation() {
   const { data: session } = useSession();
   const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const { t, i18n } = useTranslations();
+  const { t } = useTranslations();
 
   const handleSignOut = useCallback(() => {
     signOut({ callbackUrl: "/" });
@@ -20,18 +19,6 @@ export const Navigation = memo(function Navigation() {
   const handleMenuToggle = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
   }, [isMenuOpen]);
-
-  const handleLangMenuToggle = useCallback(() => {
-    setIsLangMenuOpen(!isLangMenuOpen);
-  }, [isLangMenuOpen]);
-
-  const handleLanguageChange = useCallback(
-    (code: string) => {
-      i18n.changeLanguage(code as Language);
-      setIsLangMenuOpen(false);
-    },
-    [i18n]
-  );
 
   return (
     <div className="navbar bg-base-100 shadow-lg">
@@ -105,41 +92,6 @@ export const Navigation = memo(function Navigation() {
 
       <div className="navbar-end">
         <div className="flex items-center gap-2">
-          {/* Language Switcher */}
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle"
-              aria-label="Change language"
-              onClick={handleLangMenuToggle}
-            >
-              <span className="text-xl text-blue-500">🌐</span>
-            </div>
-            {isLangMenuOpen && (
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40"
-                onBlur={() => setIsLangMenuOpen(false)}
-              >
-                {Object.entries(languages).map(([code, name]) => (
-                  <li key={code}>
-                    <button
-                      onClick={() => handleLanguageChange(code)}
-                      className={`text-sm ${
-                        i18n.language === code
-                          ? "bg-primary text-primary-content"
-                          : ""
-                      }`}
-                    >
-                      {name as string}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -195,10 +147,10 @@ export const Navigation = memo(function Navigation() {
           ) : (
             <div className="flex gap-2">
               <Link href="/auth/login" className="btn btn-ghost">
-                {t("login", "Login")}
+                {t("signin", "Sign In")}
               </Link>
               <Link href="/auth/register" className="btn btn-primary">
-                {t("register", "Register")}
+                {t("signup", "Sign Up")}
               </Link>
             </div>
           )}
