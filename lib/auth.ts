@@ -177,24 +177,14 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
         try {
           const prisma = await getPrisma();
           if (prisma) {
-            // Make calinecoralie0@gmail.com an admin
-            if (user.email === 'calinecoralie0@gmail.com') {
+                        // Make the first user an admin automatically
+            const userCount = await prisma.user.count();
+            if (userCount === 1) {
               await prisma.user.update({
                 where: { id: user.id },
                 data: { role: 'ADMIN' }
               });
-              console.log(`Made ${user.email} an admin`);
-            }
-            // Also make the first user an admin as fallback
-            else {
-              const userCount = await prisma.user.count();
-              if (userCount === 1) {
-                await prisma.user.update({
-                  where: { id: user.id },
-                  data: { role: 'ADMIN' }
-                });
-                console.log(`Made first user ${user.email} an admin`);
-              }
+              console.log(`Made first user ${user.email} an admin`);
             }
           }
         } catch (error) {
