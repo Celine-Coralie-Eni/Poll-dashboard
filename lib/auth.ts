@@ -13,6 +13,13 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
     // GitHub OAuth Provider
     GitHubProvider({
@@ -75,11 +82,32 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      console.log("Session callback:", { 
+        sessionUser: session.user ? { email: session.user.email, name: session.user.name } : null,
+        token: token ? { id: token.id, role: token.role } : null
+      });
+      
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
       }
       return session;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("SignIn callback:", { 
+        user: user ? { id: user.id, email: user.email, name: user.name } : null, 
+        account: account ? { provider: account.provider, type: account.type } : null, 
+        profile: profile ? { email: profile.email, name: profile.name } : null 
+      });
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      console.log("Redirect callback:", { url, baseUrl });
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
   pages: {
