@@ -4,7 +4,6 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-// Create Prisma client with optimized configuration
 const createPrismaClient = () => {
   return new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
@@ -16,16 +15,13 @@ const createPrismaClient = () => {
   });
 };
 
-// Use singleton pattern for better performance
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 
-// Optimize database queries with common patterns
 export const dbUtils = {
-  // Cached user lookup
   async findUserByEmail(email: string) {
     return prisma.user.findUnique({
       where: { email },
@@ -34,12 +30,11 @@ export const dbUtils = {
         email: true,
         name: true,
         role: true,
-        password: true, // Only include when needed for auth
+        password: true,
       },
     });
   },
 
-  // Optimized poll queries with proper includes
   async findPollWithVotes(id: string) {
     return prisma.poll.findUnique({
       where: { id },
@@ -59,7 +54,6 @@ export const dbUtils = {
     });
   },
 
-  // Optimized polls listing
   async findManyPolls(take = 10, skip = 0) {
     return prisma.poll.findMany({
       take,
@@ -73,7 +67,6 @@ export const dbUtils = {
     });
   },
 
-  // Cached admin stats with optimized queries
   async getAdminStats() {
     const [totalUsers, totalPolls, totalVotes, recentPolls] = await Promise.all([
       prisma.user.count(),
@@ -106,12 +99,3 @@ export const dbUtils = {
     };
   },
 };
-
-// Graceful shutdown
-if (process.env.NODE_ENV !== "production") {
-  process.on('beforeExit', async () => {
-    await prisma.$disconnect();
-  });
-}
-
-export default prisma;
