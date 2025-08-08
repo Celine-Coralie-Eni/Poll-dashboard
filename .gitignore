@@ -213,3 +213,4 @@ coverage/
 # Tolgee
 tolgee/
 .tolgee/
+.env.remote
