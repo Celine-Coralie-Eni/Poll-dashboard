@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/db-optimized";
 import { getClientIP, generateSessionId } from "@/lib/utils";
 import { z } from "zod";
+
+// Dynamic import to avoid build-time issues
+async function getPrisma() {
+  try {
+    const { prisma } = await import('@/lib/db-optimized');
+    return prisma;
+  } catch (error) {
+    console.error('Failed to import Prisma client:', error);
+    throw new Error('Database connection failed');
+  }
+}
 
 const voteSchema = z.object({
   optionId: z.string().min(1, "Option ID is required"),
@@ -21,6 +31,7 @@ export async function POST(
     const ipAddress = getClientIP(request);
     const sessionId = generateSessionId();
 
+    const prisma = await getPrisma();
     // Check if poll exists
     const poll = await prisma.poll.findUnique({
       where: { id: params.id },

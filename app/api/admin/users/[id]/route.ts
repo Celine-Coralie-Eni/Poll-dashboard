@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/db-optimized';
+
+// Dynamic import to avoid build-time issues
+async function getPrisma() {
+  try {
+    const { prisma } = await import('@/lib/db-optimized');
+    return prisma;
+  } catch (error) {
+    console.error('Failed to import Prisma client:', error);
+    throw new Error('Database connection failed');
+  }
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -20,6 +30,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
     }
 
+    const prisma = await getPrisma();
     const updatedUser = await prisma.user.update({
       where: { id: params.id },
       data: { role },
@@ -61,6 +72,7 @@ export async function DELETE(
       );
     }
 
+    const prisma = await getPrisma();
     await prisma.user.delete({
       where: { id: params.id }
     });

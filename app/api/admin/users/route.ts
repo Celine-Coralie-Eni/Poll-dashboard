@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from '@/lib/auth';
-import { prisma } from "@/lib/db-optimized";
+
+// Dynamic import to avoid build-time issues
+async function getPrisma() {
+  try {
+    const { prisma } = await import('@/lib/db-optimized');
+    return prisma;
+  } catch (error) {
+    console.error('Failed to import Prisma client:', error);
+    throw new Error('Database connection failed');
+  }
+}
 
 export async function GET() {
   try {
@@ -11,6 +21,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const prisma = await getPrisma();
     const users = await prisma.user.findMany({
       select: {
         id: true,

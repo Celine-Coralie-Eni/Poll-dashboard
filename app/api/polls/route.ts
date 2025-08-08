@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/db-optimized";
 import { z } from "zod";
+
+// Dynamic import to avoid build-time issues
+async function getPrisma() {
+  try {
+    const { prisma } = await import('@/lib/db-optimized');
+    return prisma;
+  } catch (error) {
+    console.error('Failed to import Prisma client:', error);
+    throw new Error('Database connection failed');
+  }
+}
 
 const createPollSchema = z.object({
   title: z.string().min(1, "Poll title is required"),
@@ -14,6 +24,7 @@ const createPollSchema = z.object({
 
 export async function GET() {
   try {
+    const prisma = await getPrisma();
     const polls = await prisma.poll.findMany({
       where: { isActive: true },
       include: {
@@ -52,6 +63,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = createPollSchema.parse(body);
 
+    const prisma = await getPrisma();
     const poll = await prisma.poll.create({
       data: {
         title: validatedData.title,
