@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db-optimized";
 import { hashPassword } from "@/lib/utils";
 import { z } from "zod";
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+// Dynamic import to avoid build-time issues
+async function getPrisma() {
+  try {
+    const { prisma } = await import('@/lib/db-optimized');
+    return prisma;
+  } catch (error) {
+    console.error('Failed to import Prisma client:', error);
+    throw new Error('Database connection failed');
+  }
+}
 
 const registerSchema = z
   .object({
@@ -20,6 +33,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = registerSchema.parse(body);
 
+    const prisma = await getPrisma();
+    
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email },
