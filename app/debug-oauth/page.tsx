@@ -3,12 +3,20 @@
 import { signIn, getProviders, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
+interface DebugInfo {
+  result?: any;
+  timestamp?: string;
+  url?: string;
+  success?: boolean;
+  error?: any;
+}
+
 export default function DebugOAuthPage() {
   const { data: session, status } = useSession();
   const [providers, setProviders] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<any>({});
+  const [debugInfo, setDebugInfo] = useState<DebugInfo>({});
 
   useEffect(() => {
     const loadProviders = async () => {
@@ -41,7 +49,7 @@ export default function DebugOAuthPage() {
       if (result?.error) {
         setError(result.error);
       } else if (result?.ok) {
-        setDebugInfo(prev => ({ ...prev, success: true }));
+        setDebugInfo((prev: DebugInfo) => ({ ...prev, success: true }));
       }
     } catch (err) {
       console.error("Sign in error:", err);
