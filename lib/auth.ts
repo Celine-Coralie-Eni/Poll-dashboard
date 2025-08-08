@@ -12,12 +12,66 @@ async function getPrisma() {
     return prisma;
   } catch (error) {
     console.error('Failed to import Prisma client:', error);
+    // Return a mock adapter for build time
+    if (process.env.NODE_ENV === 'production' && process.env.VERCEL) {
+      console.log('Using mock adapter for Vercel deployment');
+      return null;
+    }
     throw new Error('Database connection failed');
   }
 }
 
 export async function getAuthOptions(): Promise<NextAuthOptions> {
   const prisma = await getPrisma();
+  
+  // If prisma is null (build time), return a basic config without adapter
+  if (!prisma) {
+    return {
+      providers: [
+        // Google OAuth Provider
+        GoogleProvider({
+          clientId: process.env.GOOGLE_CLIENT_ID!,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+          authorization: {
+            params: {
+              prompt: "consent",
+              access_type: "offline",
+              response_type: "code"
+            }
+          }
+        }),
+        // GitHub OAuth Provider
+        GitHubProvider({
+          clientId: process.env.GITHUB_CLIENT_ID!,
+          clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        }),
+      ],
+      session: {
+        strategy: "jwt",
+      },
+      callbacks: {
+        async jwt({ token, user, account }) {
+          if (user) {
+            token.id = user.id;
+            token.role = user.role;
+          }
+          return token;
+        },
+        async session({ session, token }) {
+          if (token) {
+            session.user.id = token.id as string;
+            session.user.role = token.role as string;
+          }
+          return session;
+        },
+      },
+      pages: {
+        signIn: "/auth/login",
+      },
+      secret: process.env.NEXTAUTH_SECRET,
+      debug: process.env.NODE_ENV === "development",
+    };
+  }
   
   return {
     adapter: PrismaAdapter(prisma),
@@ -48,6 +102,11 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
         },
         async authorize(credentials) {
           if (!credentials?.email || !credentials?.password) {
+            return null;
+          }
+
+          if (!prisma) {
+            console.log('Prisma not available for credentials auth');
             return null;
           }
 
