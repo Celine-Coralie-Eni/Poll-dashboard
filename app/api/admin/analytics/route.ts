@@ -18,7 +18,6 @@ export async function GET() {
       totalVotes,
       activePolls,
       recentActivity,
-      topPolls,
       userGrowth
     ] = await Promise.all([
       // Basic stats
@@ -36,17 +35,6 @@ export async function GET() {
         }
       }),
       
-      // Top polls by votes
-      prisma.poll.findMany({
-        take: 5,
-        include: {
-          _count: { select: { votes: true } }
-        },
-        orderBy: {
-          votes: { _count: 'desc' }
-        }
-      }),
-      
       // User growth (last 30 days)
       prisma.user.count({
         where: {
@@ -56,6 +44,15 @@ export async function GET() {
         }
       })
     ]);
+
+    // Get top polls separately to avoid complex orderBy
+    const topPolls = await prisma.poll.findMany({
+      take: 5,
+      include: {
+        _count: { select: { votes: true } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
 
     return NextResponse.json({
       overview: {
