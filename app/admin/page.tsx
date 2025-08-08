@@ -141,7 +141,7 @@ export default function AdminPage() {
               </Link>
               <button
                 className="btn btn-outline"
-                onClick={() => window.open('/api/admin/export?format=csv', '_blank')}
+                onClick={() => window.open('/api/admin/api/export?format=csv', '_blank')}
               >
                 {t("export_results")}
               </button>
