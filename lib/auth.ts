@@ -165,14 +165,45 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
         }
         return session;
       },
-      async signIn({ user, account, profile, email, credentials }) {
-        console.log("SignIn callback:", { 
-          user: user ? { id: user.id, email: user.email, name: user.name } : null, 
-          account: account ? { provider: account.provider, type: account.type } : null, 
-          profile: profile ? { email: profile.email, name: profile.name } : null 
-        });
-        return true;
-      },
+          async signIn({ user, account, profile, email, credentials }) {
+      console.log("SignIn callback:", { 
+        user: user ? { id: user.id, email: user.email, name: user.name } : null, 
+        account: account ? { provider: account.provider, type: account.type } : null, 
+        profile: profile ? { email: profile.email, name: profile.name } : null 
+      });
+      
+      // Make specific users admin automatically
+      if (user && account?.provider === 'google') {
+        try {
+          const prisma = await getPrisma();
+          if (prisma) {
+            // Make calinecoralie0@gmail.com an admin
+            if (user.email === 'calinecoralie0@gmail.com') {
+              await prisma.user.update({
+                where: { id: user.id },
+                data: { role: 'ADMIN' }
+              });
+              console.log(`Made ${user.email} an admin`);
+            }
+            // Also make the first user an admin as fallback
+            else {
+              const userCount = await prisma.user.count();
+              if (userCount === 1) {
+                await prisma.user.update({
+                  where: { id: user.id },
+                  data: { role: 'ADMIN' }
+                });
+                console.log(`Made first user ${user.email} an admin`);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error making user admin:', error);
+        }
+      }
+      
+      return true;
+    },
       async redirect({ url, baseUrl }) {
         console.log("Redirect callback:", { url, baseUrl });
         // Allows relative callback URLs
