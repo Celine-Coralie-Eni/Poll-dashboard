@@ -13,16 +13,6 @@ const createPrismaClient = () => {
         url: process.env.DATABASE_URL,
       },
     },
-    // Add connection timeout settings for remote database
-    __internal: {
-      engine: {
-        connectTimeout: 60000, // 60 seconds
-        pool: {
-          min: 1,
-          max: 10,
-        },
-      },
-    },
   });
 };
 
