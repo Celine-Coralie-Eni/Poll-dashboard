@@ -24,6 +24,7 @@ interface AnalyticsData {
   };
 }
 
+export const dynamic = "force-dynamic";
 export default function AnalyticsPage() {
   const { data: session } = useSession();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
@@ -32,13 +33,16 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('/api/admin/analytics');
+        const response = await fetch("/api/admin/analytics", {
+          cache: "no-store",
+        });
+
         if (response.ok) {
           const data = await response.json();
           setAnalytics(data);
         }
       } catch (error) {
-        console.error('Error fetching analytics:', error);
+        console.error("Error fetching analytics:", error);
       } finally {
         setLoading(false);
       }
@@ -46,6 +50,7 @@ export default function AnalyticsPage() {
 
     fetchAnalytics();
   }, []);
+
 
   if (session?.user?.role !== "ADMIN") {
     return (
