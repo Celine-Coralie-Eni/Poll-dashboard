@@ -4,6 +4,9 @@ import { authOptions } from "@/lib/auth";
 import { getClientIP, generateSessionId } from "@/lib/utils";
 import { z } from "zod";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Dynamic import to avoid build-time issues
 async function getPrisma() {
   try {

@@ -4,6 +4,20 @@ const nextConfig = {
     // Enable optimized package imports
     optimizePackageImports: ['@prisma/client', 'next-auth', 'bcryptjs'],
   },
+  // Configure API routes to be dynamic
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, must-revalidate',
+          },
+        ],
+      },
+    ];
+  },
   // Optimize images
   images: {
     domains: ["localhost"],
