@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getAuthOptions } from "@/lib/auth";
 import { getClientIP, generateSessionId } from "@/lib/utils";
 import { z } from "zod";
 
@@ -30,6 +30,7 @@ export async function POST(
     const body = await request.json();
     const validatedData = voteSchema.parse(body);
 
+    const authOptions = await getAuthOptions();
     const session = await getServerSession(authOptions);
     const ipAddress = getClientIP(request);
     const sessionId = generateSessionId();

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getAuthOptions } from "@/lib/auth";
 import { z } from "zod";
 
 // Force dynamic rendering
@@ -63,6 +63,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const authOptions = await getAuthOptions();
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== "ADMIN") {
@@ -103,6 +104,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    const authOptions = await getAuthOptions();
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== "ADMIN") {

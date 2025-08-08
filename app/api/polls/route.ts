@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getAuthOptions } from "@/lib/auth";
 import { z } from "zod";
 
 // Force dynamic rendering
@@ -57,6 +57,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const authOptions = await getAuthOptions();
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
