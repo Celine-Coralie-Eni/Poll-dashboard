@@ -2,6 +2,7 @@
 
 import { Navigation } from "@/components/Navigation";
 import Link from "next/link";
+// Trigger redeploy with environment variables
 
 export default function HomePage() {
   return (
