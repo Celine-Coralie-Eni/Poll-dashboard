@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "@/lib/tolgee-optimized";
 import Link from "next/link";
+import { Button } from "@/components/Button";
 
 export default function CreatePollPage() {
   const { data: session } = useSession();
@@ -26,8 +27,8 @@ export default function CreatePollPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">{t('authentication_required', 'Authentication Required')}</h1>
             <p className="mb-4">{t('need_login_create_polls', 'You need to be logged in to create polls.')}</p>
-            <Link href="/auth/login" className="btn btn-primary">
-              {t('login', 'Login')}
+            <Link href="/auth/login">
+              <Button>{t('login', 'Login')}</Button>
             </Link>
           </div>
         </div>
@@ -96,34 +97,34 @@ export default function CreatePollPage() {
   };
 
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
             {/* Header Section */}
-            <div className="bg-primary px-8 py-6 rounded-t-2xl">
-              <h1 className="text-3xl font-bold text-primary-content mb-2">
+            <div className="bg-blue-600 px-8 py-6 rounded-t-2xl">
+              <h1 className="text-3xl font-bold text-white mb-2">
                 {t('create_new_poll', 'Create New Poll')}
               </h1>
-              <p className="text-primary-content/90 text-lg">
+              <p className="text-white/90 text-lg">
                 {t('create_new_poll_desc', 'Create a new poll and start collecting responses from your audience.')}
               </p>
             </div>
 
             {/* Form Section */}
-            <div className="card-body">
+            <div className="card-body text-gray-900 dark:text-white">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Poll Title */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">{t('poll_title_label', 'Poll Title')}</span>
+                    <span className="label-text font-semibold text-gray-700 dark:text-gray-300">{t('poll_title_label', 'Poll Title')}</span>
                   </label>
                   <input
                     type="text"
                     placeholder={t('poll_title_placeholder', "What's your question?")}
-                    className="input input-bordered input-primary w-full"
+                    className="input input-bordered w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     required
@@ -133,11 +134,11 @@ export default function CreatePollPage() {
                 {/* Description */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">{t('description_optional', 'Description (Optional)')}</span>
+                    <span className="label-text font-semibold text-gray-700 dark:text-gray-300">{t('description_optional', 'Description (Optional)')}</span>
                   </label>
                   <textarea
                     placeholder={t('description_placeholder', 'Add more context to your poll...')}
-                    className="textarea textarea-bordered textarea-primary resize-none"
+                    className="textarea textarea-bordered resize-none bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                     rows={3}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -147,7 +148,7 @@ export default function CreatePollPage() {
                 {/* Poll Options */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">{t('poll_options', 'Poll Options')}</span>
+                    <span className="label-text font-semibold text-gray-700 dark:text-gray-300">{t('poll_options', 'Poll Options')}</span>
                   </label>
                   <div className="space-y-3">
                     {options.map((option, index) => (
@@ -155,19 +156,20 @@ export default function CreatePollPage() {
                         <input
                           type="text"
                           placeholder={t('option_placeholder', 'Enter option text...')}
-                          className="input input-bordered input-primary flex-1"
+                          className="input input-bordered flex-1 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                           value={option}
                           onChange={(e) => updateOption(index, e.target.value)}
                           required
                         />
                         {options.length > 2 && (
-                          <button
+                          <Button
                             type="button"
                             onClick={() => removeOption(index)}
-                            className="btn btn-outline btn-error"
+                            variant="danger"
+                            size="sm"
                           >
                             {t('remove', 'Remove')}
-                          </button>
+                          </Button>
                         )}
                       </div>
                     ))}
@@ -178,7 +180,7 @@ export default function CreatePollPage() {
                     <input
                       type="text"
                       placeholder={t('add_new_option_placeholder', 'Add new option...')}
-                      className="input input-bordered input-primary flex-1 add-new-option-input"
+                      className="input input-bordered flex-1 add-new-option-input bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
                       onKeyPress={(e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
@@ -204,7 +206,7 @@ export default function CreatePollPage() {
                           input.value = "";
                         }
                       }}
-                      className="btn btn-circle btn-primary"
+                      className="w-12 h-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center"
                     >
                       +
                     </button>
@@ -219,9 +221,9 @@ export default function CreatePollPage() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-4 pt-6">
-                  <button
+                  <Button
                     type="submit"
-                    className="btn btn-primary flex-1"
+                    className="flex-1"
                     disabled={loading}
                   >
                     {loading ? (
@@ -232,17 +234,18 @@ export default function CreatePollPage() {
                     ) : (
                       t('create_poll', 'Create Poll')
                     )}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
-                    className="btn btn-secondary flex-1"
+                    variant="secondary"
+                    className="flex-1"
                     onClick={() => {
                       // Save as draft functionality (placeholder)
                       console.log("Save as draft clicked");
                     }}
                   >
                     {t('save_as_draft', 'Save as Draft')}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>

@@ -52,7 +52,7 @@ export default function PollsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-center items-center min-h-[50vh]">
@@ -65,7 +65,7 @@ export default function PollsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="alert alert-error">
@@ -77,7 +77,7 @@ export default function PollsPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">

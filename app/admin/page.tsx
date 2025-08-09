@@ -4,7 +4,22 @@ import { Navigation } from "@/components/Navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useTranslations } from "@/lib/tolgee-optimized";
+import { motion, AnimatePresence, easeOut } from "framer-motion";
+import { Button } from "@/components/Button";
+import { 
+  Users, 
+  BarChart3, 
+  Vote, 
+  TrendingUp, 
+  Plus, 
+  Download, 
+  Settings, 
+  Eye,
+  Edit,
+  Trash2,
+  ArrowRight,
+  Activity
+} from "lucide-react";
 
 interface Stats {
   totalUsers: number;
@@ -18,11 +33,52 @@ interface Stats {
   }>;
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: easeOut
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: easeOut
+    }
+  },
+  hover: {
+    scale: 1.02,
+    y: -5,
+    transition: {
+      duration: 0.2
+    }
+  }
+};
+
 export default function AdminPage() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslations();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -33,7 +89,6 @@ export default function AdminPage() {
           setStats(data);
         } else {
           console.error('Failed to fetch admin stats');
-          // Fallback to empty stats if API fails
           setStats({
             totalUsers: 0,
             totalPolls: 0,
@@ -43,7 +98,6 @@ export default function AdminPage() {
         }
       } catch (error) {
         console.error('Error fetching admin stats:', error);
-        // Fallback to empty stats if API fails
         setStats({
           totalUsers: 0,
           totalPolls: 0,
@@ -61,144 +115,261 @@ export default function AdminPage() {
   // Redirect if not admin
   if (session?.user?.role !== "ADMIN") {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">{t("access_denied")}</h1>
-            <p className="mb-4">
-              {t("need_admin_privileges")}
+        <motion.div 
+          className="container mx-auto px-4 py-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="text-center max-w-md mx-auto">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6"
+            >
+              <Settings className="w-10 h-10 text-red-500" />
+            </motion.div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Denied</h1>
+            <p className="text-gray-600 mb-6">
+              You need admin privileges to access this page.
             </p>
-            <Link href="/" className="btn btn-primary">
-              {t("go_home")}
+            <Link href="/">
+              <Button className="inline-flex items-center">
+                Go Home
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
             </Link>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center min-h-[50vh]">
-            <span className="loading loading-spinner loading-lg"></span>
+        <motion.div 
+          className="container mx-auto px-4 py-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex justify-center items-center min-h-[60vh]">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full"
+            />
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navigation />
 
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">{t("admin_dashboard")}</h1>
+      <motion.main 
+        className="container mx-auto px-4 py-8"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Header */}
+        <motion.div variants={itemVariants} className="text-center mb-12">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Admin Dashboard
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Manage your poll platform, monitor user activity, and analyze engagement metrics
+          </p>
+        </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body text-center">
-              <div className="text-4xl mb-2">👥</div>
-              <h3 className="card-title justify-center">{t("total_users")}</h3>
-              <p className="text-3xl font-bold text-primary">
-                {stats?.totalUsers}
-              </p>
+        <motion.div 
+          variants={itemVariants}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
+        >
+          <motion.div
+            variants={cardVariants}
+            whileHover="hover"
+            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-blue-600" />
+              </div>
+              <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-          </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Users</h3>
+            <p className="text-3xl font-bold text-blue-600">{stats?.totalUsers || 0}</p>
+            <p className="text-sm text-gray-500 mt-2">Active platform users</p>
+          </motion.div>
 
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body text-center">
-              <div className="text-4xl mb-2">📊</div>
-              <h3 className="card-title justify-center">{t("total_polls")}</h3>
-              <p className="text-3xl font-bold text-primary">
-                {stats?.totalPolls}
-              </p>
+          <motion.div
+            variants={cardVariants}
+            whileHover="hover"
+            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-purple-600" />
+              </div>
+              <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-          </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Polls</h3>
+            <p className="text-3xl font-bold text-purple-600">{stats?.totalPolls || 0}</p>
+            <p className="text-sm text-gray-500 mt-2">Created polls</p>
+          </motion.div>
 
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body text-center">
-              <div className="text-4xl mb-2">🗳️</div>
-              <h3 className="card-title justify-center">{t("total_votes")}</h3>
-              <p className="text-3xl font-bold text-primary">
-                {stats?.totalVotes}
-              </p>
+          <motion.div
+            variants={cardVariants}
+            whileHover="hover"
+            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                <Vote className="w-6 h-6 text-green-600" />
+              </div>
+              <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-          </div>
-        </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Votes</h3>
+            <p className="text-3xl font-bold text-green-600">{stats?.totalVotes || 0}</p>
+            <p className="text-sm text-gray-500 mt-2">Cast votes</p>
+          </motion.div>
+        </motion.div>
 
         {/* Quick Actions */}
-        <div className="card bg-base-100 shadow-xl mb-8">
-          <div className="card-body">
-            <h2 className="card-title text-2xl mb-6">{t("quick_actions")}</h2>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/polls/create" className="btn btn-primary">
-                {t("create_new_poll")}
-              </Link>
-              <button
-                className="btn btn-outline"
-                onClick={() => window.open('/api/admin/api/export?format=csv', '_blank')}
-              >
-                {t("export_results")}
-              </button>
-              <Link href="/admin/users" className="btn btn-outline">
-                {t("manage_users")}
-              </Link>
-              <Link href="/admin/analytics" className="btn btn-outline">
-                {t("view_analytics")}
-              </Link>
+        <motion.div variants={itemVariants} className="mb-12">
+          <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <Activity className="w-6 h-6 mr-3 text-blue-600" />
+              Quick Actions
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/polls/create" className="block p-4 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-200 transition-colors duration-200 group">
+                  <Plus className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-blue-900 mb-1">Create Poll</h3>
+                  <p className="text-sm text-blue-700">Start a new poll</p>
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button variant="ghost" className="w-full text-left p-4 bg-purple-50 hover:bg-purple-100 rounded-xl border border-purple-200 group justify-start">
+                  <div>
+                    <Download className="w-8 h-8 text-purple-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                    <h3 className="font-semibold text-purple-900 mb-1">Export Data</h3>
+                    <p className="text-sm text-purple-700">Download results</p>
+                  </div>
+                </Button>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/admin/users" className="block p-4 bg-green-50 hover:bg-green-100 rounded-xl border border-green-200 transition-colors duration-200 group">
+                  <Users className="w-8 h-8 text-green-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-green-900 mb-1">Manage Users</h3>
+                  <p className="text-sm text-green-700">User administration</p>
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/admin/analytics" className="block p-4 bg-orange-50 hover:bg-orange-100 rounded-xl border border-orange-200 transition-colors duration-200 group">
+                  <BarChart3 className="w-8 h-8 text-orange-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-orange-900 mb-1">Analytics</h3>
+                  <p className="text-sm text-orange-700">View insights</p>
+                </Link>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Recent Polls */}
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title text-2xl mb-6">{t("recent_polls")}</h2>
+        <motion.div variants={itemVariants}>
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div className="p-8 border-b border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                <BarChart3 className="w-6 h-6 mr-3 text-blue-600" />
+                Recent Polls
+              </h2>
+            </div>
             <div className="overflow-x-auto">
-              <table className="table table-zebra">
-                <thead>
+              <table className="w-full">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th>{t("title")}</th>
-                    <th>{t("created")}</th>
-                    <th>{t("votes")}</th>
-                    <th>{t("actions")}</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Title</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Created</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Votes</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {stats?.recentPolls.map((poll) => (
-                    <tr key={poll.id}>
-                      <td className="font-medium">{poll.title}</td>
-                      <td>{new Date(poll.createdAt).toLocaleDateString()}</td>
-                      <td>{poll._count.votes}</td>
-                      <td>
-                        <div className="flex gap-2">
-                          <Link
-                            href={`/polls/${poll.id}`}
-                            className="btn btn-sm btn-outline"
-                          >
-                            {t("view")}
-                          </Link>
-                          <button className="btn btn-sm btn-outline">
-                            {t("edit")}
-                          </button>
-                          <button className="btn btn-sm btn-error">
-                            {t("delete")}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                <tbody className="divide-y divide-gray-100">
+                  <AnimatePresence>
+                    {stats?.recentPolls.map((poll, index) => (
+                      <motion.tr
+                        key={poll.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1, duration: 0.3 }}
+                        className="hover:bg-gray-50 transition-colors duration-200"
+                      >
+                        <td className="px-8 py-4">
+                          <div className="font-medium text-gray-900">{poll.title}</div>
+                        </td>
+                        <td className="px-8 py-4 text-gray-600">
+                          {new Date(poll.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-8 py-4">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            {poll._count.votes} votes
+                          </span>
+                        </td>
+                        <td className="px-8 py-4">
+                          <div className="flex space-x-2">
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </motion.button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </AnimatePresence>
                 </tbody>
               </table>
+              {(!stats?.recentPolls || stats.recentPolls.length === 0) && (
+                <div className="text-center py-12">
+                  <BarChart3 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 text-lg">No polls created yet</p>
+                  <p className="text-gray-400">Create your first poll to get started</p>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </main>
+        </motion.div>
+      </motion.main>
     </div>
   );
 }
