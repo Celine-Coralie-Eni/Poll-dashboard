@@ -150,6 +150,7 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
         if (user) {
           token.id = user.id;
           token.role = user.role;
+          token.email = user.email;
         }
         return token;
       },
@@ -162,44 +163,60 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
         if (token) {
           session.user.id = token.id as string;
           session.user.role = token.role as string;
+          
+          // Handle admin assignment for the first user
+          try {
+            const prisma = await getPrisma();
+            if (prisma && token.email) {
+              // Check if this is the first user and make them admin
+              const userCount = await prisma.user.count();
+              if (userCount === 1) {
+                const user = await prisma.user.findUnique({
+                  where: { email: token.email as string }
+                });
+                
+                if (user && user.role !== 'ADMIN') {
+                  await prisma.user.update({
+                    where: { email: token.email as string },
+                    data: { role: 'ADMIN' }
+                  });
+                  console.log(`Made first user ${token.email} an admin`);
+                  
+                  // Update the token role
+                  token.role = 'ADMIN';
+                  session.user.role = 'ADMIN';
+                }
+              }
+            }
+          } catch (error) {
+            console.error('Error handling admin assignment:', error);
+          }
         }
         return session;
       },
-          async signIn({ user, account, profile, email, credentials }) {
-      console.log("SignIn callback:", { 
-        user: user ? { id: user.id, email: user.email, name: user.name } : null, 
-        account: account ? { provider: account.provider, type: account.type } : null, 
-        profile: profile ? { email: profile.email, name: profile.name } : null 
-      });
-      
-      // Make specific users admin automatically
-      if (user && account?.provider === 'google') {
-        try {
-          const prisma = await getPrisma();
-          if (prisma) {
-                        // Make the first user an admin automatically
-            const userCount = await prisma.user.count();
-            if (userCount === 1) {
-              await prisma.user.update({
-                where: { id: user.id },
-                data: { role: 'ADMIN' }
-              });
-              console.log(`Made first user ${user.email} an admin`);
-            }
-          }
-        } catch (error) {
-          console.error('Error making user admin:', error);
-        }
-      }
-      
-      return true;
-    },
+      async signIn({ user, account, profile, email, credentials }) {
+        console.log("SignIn callback:", { 
+          user: user ? { id: user.id, email: user.email, name: user.name } : null, 
+          account: account ? { provider: account.provider, type: account.type } : null, 
+          profile: profile ? { email: profile.email, name: profile.name } : null 
+        });
+        
+        // For OAuth sign-ins, we'll handle admin assignment in the session callback
+        // since the user might not be fully created yet in the signIn callback
+        return true;
+      },
       async redirect({ url, baseUrl }) {
         console.log("Redirect callback:", { url, baseUrl });
-        // Allows relative callback URLs
-        if (url.startsWith("/")) return `${baseUrl}${url}`;
-        // Allows callback URLs on the same origin
-        else if (new URL(url).origin === baseUrl) return url;
+        
+        // If the url is relative, prefix it with the base url
+        if (url.startsWith("/")) {
+          return `${baseUrl}${url}`;
+        }
+        // If the url is on the same origin, allow it
+        else if (new URL(url).origin === baseUrl) {
+          return url;
+        }
+        // Otherwise, redirect to the base url
         return baseUrl;
       },
     },
