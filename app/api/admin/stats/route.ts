@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server';
+import { dbUtils } from '@/lib/db-optimized';
 
 export async function GET() {
-  return NextResponse.json({
-    totalUsers: 0,
-    totalPolls: 0,
-    totalVotes: 0,
-    activePolls: 0
-  });
+  try {
+    const stats = await dbUtils.getAdminStats();
+    return NextResponse.json(stats);
+  } catch (error) {
+    console.error('Error fetching admin stats:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch admin stats' },
+      { status: 500 }
+    );
+  }
 }

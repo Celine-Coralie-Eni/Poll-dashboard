@@ -12,6 +12,22 @@ const createPrismaClient = () => {
         url: process.env.DATABASE_URL,
       },
     },
+    // Enhanced connection settings with retry logic
+    __internal: {
+      engine: {
+        connectionLimit: 3, // Reduced to prevent overwhelming the connection pool
+        pool: {
+          min: 0,
+          max: 5, // Reduced max connections
+          acquireTimeoutMillis: 60000, // Increased timeout
+          createTimeoutMillis: 60000, // Increased timeout
+          destroyTimeoutMillis: 10000, // Increased timeout
+          idleTimeoutMillis: 60000, // Increased timeout
+          reapIntervalMillis: 2000, // Increased interval
+          createRetryIntervalMillis: 1000, // Increased retry interval
+        },
+      },
+    },
   });
 };
 
