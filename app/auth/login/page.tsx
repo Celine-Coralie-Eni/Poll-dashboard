@@ -6,7 +6,6 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { PasswordInput } from "@/components/PasswordInput";
-import { EnvChecker } from "@/components/EnvChecker";
 
 export default function LoginPage() {
   const { data: session } = useSession();
@@ -77,7 +76,6 @@ export default function LoginPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-md mx-auto">
-          <EnvChecker />
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h1 className="card-title text-2xl justify-center mb-6">
