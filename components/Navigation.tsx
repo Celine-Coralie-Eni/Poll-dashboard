@@ -16,13 +16,15 @@ import {
   Settings,
   Moon,
   Sun,
-  ChevronDown
+  ChevronDown,
+  Globe
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useTranslations, languages } from "@/lib/tolgee-optimized";
 
 const navItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/polls", label: "Polls", icon: Vote },
+  { href: "/", label: t("home", "Home"), icon: Home },
+  { href: "/polls", label: t("polls", "Polls"), icon: Vote },
 ];
 
 export function Navigation() {
@@ -31,6 +33,7 @@ export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { i18n, t } = useTranslations();
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
@@ -95,6 +98,22 @@ export function Navigation() {
                 </Link>
               </motion.div>
             ))}
+
+            {/* Language Switcher */}
+            <div className="flex items-center gap-2">
+              <Globe className="w-5 h-5 text-gray-500 dark:text-gray-300" />
+              <select
+                value={i18n.language}
+                onChange={e => i18n.changeLanguage(e.target.value as "en" | "fr")}
+                className="rounded-lg px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ minWidth: 90 }}
+                title="Change language"
+              >
+                {Object.entries(languages).map(([code, label]) => (
+                  <option key={code} value={code}>{label}</option>
+                ))}
+              </select>
+            </div>
 
             {/* Admin Dashboard Link */}
             {session?.user?.role === "ADMIN" && (
