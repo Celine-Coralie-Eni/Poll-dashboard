@@ -22,11 +22,6 @@ import {
 import { useState, useRef, useEffect } from "react";
 import { useTranslations, languages } from "@/lib/tolgee-optimized";
 
-const navItems = [
-  { href: "/", label: t("home", "Home"), icon: Home },
-  { href: "/polls", label: t("polls", "Polls"), icon: Vote },
-];
-
 export function Navigation() {
   const { data: session } = useSession();
   const { theme, toggleTheme } = useTheme();
@@ -34,6 +29,11 @@ export function Navigation() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { i18n, t } = useTranslations();
+
+  const navItems = [
+    { href: "/", label: t("home", "Home"), icon: Home },
+    { href: "/polls", label: t("polls", "Polls"), icon: Vote },
+  ];
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });

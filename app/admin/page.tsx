@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Activity
 } from "lucide-react";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 interface Stats {
   totalUsers: number;
@@ -77,6 +78,7 @@ const cardVariants = {
 
 export default function AdminPage() {
   const { data: session } = useSession();
+  const { t } = useTranslations();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [deletePollId, setDeletePollId] = useState<string | null>(null);
@@ -133,13 +135,13 @@ export default function AdminPage() {
             >
               <Settings className="w-10 h-10 text-red-500" />
             </motion.div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Denied</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">{t('access_denied', 'Access Denied')}</h1>
             <p className="text-gray-600 mb-6">
-              You need admin privileges to access this page.
+              {t('admin_privileges_required', 'You need admin privileges to access this page.')}
             </p>
             <Link href="/">
               <Button className="inline-flex items-center">
-                Go Home
+                {t('go_home', 'Go Home')}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -198,10 +200,10 @@ export default function AdminPage() {
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center mb-12">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Admin Dashboard
+            {t('admin_dashboard', 'Admin Dashboard')}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Manage your poll platform, monitor user activity, and analyze engagement metrics
+            {t('manage_platform_desc', 'Manage your poll platform, monitor user activity, and analyze engagement metrics')}
           </p>
         </motion.div>
 
@@ -221,9 +223,9 @@ export default function AdminPage() {
               </div>
               <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Users</h3>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('total_users', 'Total Users')}</h3>
             <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats?.totalUsers || 0}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Active platform users</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('active_platform_users', 'Active platform users')}</p>
           </motion.div>
 
           <motion.div
@@ -237,9 +239,9 @@ export default function AdminPage() {
               </div>
               <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Polls</h3>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('total_polls', 'Total Polls')}</h3>
             <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats?.totalPolls || 0}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Created polls</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('created_polls', 'Created polls')}</p>
           </motion.div>
 
           <motion.div
@@ -253,9 +255,9 @@ export default function AdminPage() {
               </div>
               <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Votes</h3>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('total_votes', 'Total Votes')}</h3>
             <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats?.totalVotes || 0}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Cast votes</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('cast_votes', 'Cast votes')}</p>
           </motion.div>
         </motion.div>
 
@@ -264,14 +266,14 @@ export default function AdminPage() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-700">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
               <Activity className="w-6 h-6 mr-3 text-blue-600 dark:text-blue-400" />
-              Quick Actions
+              {t('quick_actions', 'Quick Actions')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link href="/polls/create" className="block p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl border border-blue-200 dark:border-blue-800 transition-colors duration-200 group">
                   <Plus className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">Create Poll</h3>
-                  <p className="text-sm text-blue-700 dark:text-blue-300/80">Start a new poll</p>
+                  <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">{t('create_poll', 'Create Poll')}</h3>
+                  <p className="text-sm text-blue-700 dark:text-blue-300/80">{t('start_new_poll', 'Start a new poll')}</p>
                 </Link>
               </motion.div>
 
@@ -279,8 +281,8 @@ export default function AdminPage() {
                 <Button variant="ghost" className="w-full text-left p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-xl border border-purple-200 dark:border-purple-800 group justify-start">
                   <div>
                     <Download className="w-8 h-8 text-purple-600 dark:text-purple-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                    <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">Export Data</h3>
-                    <p className="text-sm text-purple-700 dark:text-purple-300/80">Download results</p>
+                    <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">{t('export_results', 'Export Data')}</h3>
+                    <p className="text-sm text-purple-700 dark:text-purple-300/80">{t('download_results', 'Download results')}</p>
                   </div>
                 </Button>
               </motion.div>
@@ -288,16 +290,16 @@ export default function AdminPage() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link href="/admin/users" className="block p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-xl border border-green-200 dark:border-green-800 transition-colors duration-200 group">
                   <Users className="w-8 h-8 text-green-600 dark:text-green-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-green-900 dark:text-green-200 mb-1">Manage Users</h3>
-                  <p className="text-sm text-green-700 dark:text-green-300/80">User administration</p>
+                  <h3 className="font-semibold text-green-900 dark:text-green-200 mb-1">{t('manage_users', 'Manage Users')}</h3>
+                  <p className="text-sm text-green-700 dark:text-green-300/80">{t('user_administration', 'User administration')}</p>
                 </Link>
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link href="/admin/analytics" className="block p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-xl border border-orange-200 dark:border-orange-800 transition-colors duration-200 group">
                   <BarChart3 className="w-8 h-8 text-orange-600 dark:text-orange-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-1">Analytics</h3>
-                  <p className="text-sm text-orange-700 dark:text-orange-300/80">View insights</p>
+                  <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-1">{t('analytics', 'Analytics')}</h3>
+                  <p className="text-sm text-orange-700 dark:text-orange-300/80">{t('view_insights', 'View insights')}</p>
                 </Link>
               </motion.div>
             </div>
@@ -310,17 +312,17 @@ export default function AdminPage() {
             <div className="p-8 border-b border-gray-100 dark:border-gray-700">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
                 <BarChart3 className="w-6 h-6 mr-3 text-blue-600 dark:text-blue-400" />
-                Recent Polls
+                {t('recent_polls', 'Recent Polls')}
               </h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Title</th>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Created</th>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Votes</th>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Actions</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">{t('title', 'Title')}</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">{t('created', 'Created')}</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">{t('votes', 'Votes')}</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">{t('actions', 'Actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -351,7 +353,7 @@ export default function AdminPage() {
                               whileTap={{ scale: 0.95 }}
                               className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg transition-colors duration-200"
                               onClick={() => window.location.href = `/polls/${poll.id}`}
-                              title="View Poll"
+                              title={t('view_poll', 'View Poll')}
                             >
                               <Eye className="w-4 h-4" />
                             </motion.button>
@@ -360,7 +362,7 @@ export default function AdminPage() {
                               whileTap={{ scale: 0.95 }}
                               className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors duration-200"
                               onClick={() => setDeletePollId(poll.id)}
-                              title="Delete Poll"
+                              title={t('delete_poll', 'Delete Poll')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </motion.button>
@@ -374,8 +376,8 @@ export default function AdminPage() {
               {(!stats?.recentPolls || stats.recentPolls.length === 0) && (
                 <div className="text-center py-12">
                   <BarChart3 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 text-lg">No polls created yet</p>
-                  <p className="text-gray-400">Create your first poll to get started</p>
+                  <p className="text-gray-500 text-lg">{t('no_polls_created_yet', 'No polls created yet')}</p>
+                  <p className="text-gray-400">{t('create_your_first_poll', 'Create your first poll to get started')}</p>
                 </div>
               )}
             </div>
@@ -387,20 +389,20 @@ export default function AdminPage() {
       {deletePollId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Delete Poll</h2>
-            <p className="mb-6 text-gray-700 dark:text-gray-300">Are you sure you want to delete this poll? This action cannot be undone.</p>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{t('delete_poll_title', 'Delete Poll')}</h2>
+            <p className="mb-6 text-gray-700 dark:text-gray-300">{t('delete_poll_confirmation', 'Are you sure you want to delete this poll? This action cannot be undone.')}</p>
             <div className="flex justify-end space-x-4">
               <button
                 className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
                 onClick={() => setDeletePollId(null)}
               >
-                Cancel
+                {t('cancel', 'Cancel')}
               </button>
               <button
                 className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
                 onClick={() => handleDeletePoll(deletePollId)}
               >
-                Delete
+                {t('delete', 'Delete')}
               </button>
             </div>
           </div>

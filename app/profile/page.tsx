@@ -4,6 +4,7 @@ import { Navigation } from "@/components/Navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -13,6 +14,7 @@ export default function ProfilePage() {
     votesCast: 0,
     createdAt: null as string | null,
   });
+  const { t } = useTranslations();
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -84,34 +86,42 @@ export default function ProfilePage() {
         <div className="max-w-2xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
             <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
-              Profile
+              {t('profile.title', 'Profile')}
             </h1>
 
             <div className="space-y-6">
               {/* Profile Information */}
               <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                 <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Account Information
+                  {t('profile.accountInformation', 'Account Information')}
                 </h2>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
-                    <span className="text-gray-900 dark:text-white">{session.user?.name || "Not provided"}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {t('profile.name', 'Name')}
+                    </span>
+                    <span className="text-gray-900 dark:text-white">{session.user?.name || t('profile.notProvided', 'Not provided')}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {t('profile.email', 'Email')}
+                    </span>
                     <span className="text-gray-900 dark:text-white">{session.user?.email}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700 dark:text-gray-300">Role:</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {t('profile.role', 'Role')}
+                    </span>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      {(session as any)?.user?.role || "User"}
+                      {(session as any)?.user?.role || t('profile.user', 'User')}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-700 dark:text-gray-300">Account Status:</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {t('profile.accountStatus', 'Account Status')}
+                    </span>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                      Active
+                      {t('profile.active', 'Active')}
                     </span>
                   </div>
                 </div>
@@ -119,33 +129,35 @@ export default function ProfilePage() {
 
               {/* Quick Actions */}
               <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                  {t('profile.quickActions', 'Quick Actions')}
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <button
                     onClick={() => router.push("/polls")}
                     className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
                   >
-                    View Polls
+                    {t('profile.viewPolls', 'View Polls')}
                   </button>
                   <button
                     onClick={() => router.push("/polls/create")}
                     className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
                   >
-                    Create Poll
+                    {t('profile.createPoll', 'Create Poll')}
                   </button>
                   {(session as any)?.user?.role === "ADMIN" && (
                     <button
                       onClick={() => router.push("/admin")}
                       className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
                     >
-                      Admin Dashboard
+                      {t('profile.adminDashboard', 'Admin Dashboard')}
                     </button>
                   )}
                   <button
                     onClick={handleSignOut}
                     className="inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors duration-200"
                   >
-                    Sign Out
+                    {t('profile.signOut', 'Sign Out')}
                   </button>
                 </div>
               </div>
@@ -153,19 +165,25 @@ export default function ProfilePage() {
               {/* Account Statistics */}
               <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                 <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Account Statistics
+                  {t('profile.accountStatistics', 'Account Statistics')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Polls Created</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      {t('profile.pollsCreated', 'Polls Created')}
+                    </div>
                     <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{userStats.pollsCreated}</div>
                   </div>
                   <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Votes Cast</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      {t('profile.votesCast', 'Votes Cast')}
+                    </div>
                     <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{userStats.votesCast}</div>
                   </div>
                   <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Member Since</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      {t('profile.memberSince', 'Member Since')}
+                    </div>
                     <div className="text-lg font-bold text-green-600 dark:text-green-400">
                       {userStats.createdAt ? new Date(userStats.createdAt).toLocaleDateString() : "-"}
                     </div>

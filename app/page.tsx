@@ -15,6 +15,7 @@ import {
   CheckCircle,
   TrendingUp
 } from "lucide-react";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 const features = [
   {
@@ -86,6 +87,7 @@ const cardVariants = {
 };
 
 export default function HomePage() {
+  const { t } = useTranslations();
   const { data: session } = useSession();
   const [realStats, setRealStats] = useState(stats);
 
@@ -129,10 +131,10 @@ export default function HomePage() {
             className="mb-8"
           >
             <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 dark:from-blue-400 dark:via-purple-400 dark:to-blue-600 bg-clip-text text-transparent mb-6 leading-tight">
-              Create & Manage
+              {t('create_manage_polls', 'Create & Manage')}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
-                Polls
+                {t('polls', 'Polls')}
               </span>
             </h1>
           </motion.div>
@@ -143,8 +145,7 @@ export default function HomePage() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
           >
-            Build engaging polls with real-time results, beautiful visualizations, and secure voting. 
-            Perfect for teams, events, and community engagement.
+            {t('build_polls', 'Build engaging polls with real-time results, beautiful visualizations, and secure voting. Perfect for teams, events, and community engagement.')}
           </motion.p>
           
           <motion.div
@@ -158,7 +159,7 @@ export default function HomePage() {
                 href="/polls/create"
                 className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
               >
-                Create Your First Poll
+                {t('create_your_first_poll', 'Create Your First Poll')}
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             ) : (
@@ -167,14 +168,14 @@ export default function HomePage() {
                   href="/auth/register"
                   className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
                 >
-                  Get Started
+                  {t('get_started', 'Get Started')}
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <Link
                   href="/auth/login"
                   className="px-8 py-4 rounded-2xl font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all duration-300"
                 >
-                  Sign In
+                  {t('sign_in', 'Sign In')}
                 </Link>
               </>
             )}
@@ -210,10 +211,10 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">PollVault</span>?
+              {t('why_choose_pollvault', 'Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">PollVault</span>?')}
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Built with modern technology and user experience in mind
+              {t('built_with_modern_technology', 'Built with modern technology and user experience in mind')}
             </p>
           </motion.div>
           
@@ -246,10 +247,10 @@ export default function HomePage() {
             transition={{ delay: 1, duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Ready to Get Started?
+              {t('ready_to_get_started', 'Ready to Get Started?')}
             </h2>
             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto text-white">
-              Join thousands of users who are already creating engaging polls and gathering valuable insights
+              {t('join_thousands_of_users', 'Join thousands of users who are already creating engaging polls and gathering valuable insights')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {session ? (
@@ -257,7 +258,7 @@ export default function HomePage() {
                   href="/polls/create"
                   className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
                 >
-                  Create Poll Now
+                  {t('create_poll_now', 'Create Poll Now')}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               ) : (
@@ -266,14 +267,14 @@ export default function HomePage() {
                     href="/auth/register"
                     className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
                   >
-                    Start Creating Polls
+                    {t('start_creating_polls', 'Start Creating Polls')}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
                   <Link
                     href="/polls"
                     className="border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
                   >
-            Browse Polls
+            {t('browse_polls', 'Browse Polls')}
           </Link>
                 </>
               )}

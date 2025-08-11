@@ -4,6 +4,7 @@ import { Navigation } from "@/components/Navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 interface AnalyticsData {
   overview: {
@@ -26,6 +27,7 @@ interface AnalyticsData {
 
 export const dynamic = "force-dynamic";
 export default function AnalyticsPage() {
+  const { t } = useTranslations();
   const { data: session } = useSession();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,10 +60,10 @@ export default function AnalyticsPage() {
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-            <p className="mb-4">You need admin privileges to access this page.</p>
+            <h1 className="text-2xl font-bold mb-4">{t("AccessDeniedTitle", "Access Denied")}</h1>
+            <p className="mb-4">{t("AccessDeniedMessage", "You need admin privileges to access this page.")}</p>
             
-<Link href="/" className="btn btn-primary">Go Home</Link>
+<Link href="/" className="btn btn-primary">{t("GoHomeButton", "Go Home")}</Link>
           </div>
         </div>
       </div>
@@ -73,8 +75,8 @@ export default function AnalyticsPage() {
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
-          <Link href="/admin" className="inline-flex items-center px-4 py-2 border-2 border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">Back to Dashboard</Link>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{t("AnalyticsDashboardTitle", "Analytics Dashboard")}</h1>
+          <Link href="/admin" className="inline-flex items-center px-4 py-2 border-2 border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">{t("BackToDashboardButton", "Back to Dashboard")}</Link>
         </div>
 
         {loading ? (
@@ -86,40 +88,40 @@ export default function AnalyticsPage() {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
                 <div className="text-3xl mb-2">👥</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Users</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t("TotalUsersHeading", "Total Users")}</h3>
                 <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{analytics.overview.totalUsers}</p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
                 <div className="text-3xl mb-2">📊</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Polls</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t("TotalPollsHeading", "Total Polls")}</h3>
                 <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{analytics.overview.totalPolls}</p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
                 <div className="text-3xl mb-2">🗳️</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Votes</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t("TotalVotesHeading", "Total Votes")}</h3>
                 <p className="text-3xl font-bold text-green-600 dark:text-green-400">{analytics.overview.totalVotes}</p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
                 <div className="text-3xl mb-2">✅</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Active Polls</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t("ActivePollsHeading", "Active Polls")}</h3>
                 <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{analytics.overview.activePolls}</p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
                 <div className="text-3xl mb-2">📈</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">New Users (30d)</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{t("NewUsersHeading", "New Users (30d)")}</h3>
                 <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{analytics.growth.newUsersLast30Days}</p>
               </div>
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Top Polls by Votes</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t("TopPollsHeading", "Top Polls by Votes")}</h2>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Poll Title</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Total Votes</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Created Date</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">{t("PollTitleHeading", "Poll Title")}</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">{t("TotalVotesHeading", "Total Votes")}</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">{t("CreatedDateHeading", "Created Date")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -137,7 +139,7 @@ export default function AnalyticsPage() {
           </>
         ) : (
           <div className="text-center">
-            <p className="text-gray-900 dark:text-white">Failed to load analytics data.</p>
+            <p className="text-gray-900 dark:text-white">{t("FailedToLoadAnalyticsData", "Failed to load analytics data.")}</p>
           </div>
         )}
       </main>
