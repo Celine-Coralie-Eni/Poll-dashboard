@@ -239,18 +239,24 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
         console.log("Session:", session);
         console.log("Token:", token);
 
-        // Initialize session.user if it doesn't exist
-        if (!session.user) {
-          session.user = {
-            id: "",
-            name: "",
-            email: "",
-            image: "",
-            role: "USER"
-          };
+        // Always fetch the user from the database to get the correct id
+        try {
+          const prisma = await getPrisma();
+          if (prisma && token.email) {
+            const dbUser = await prisma.user.findUnique({ where: { email: token.email as string } });
+            if (dbUser) {
+              session.user.id = dbUser.id;
+              session.user.role = dbUser.role;
+              session.user.name = dbUser.name;
+              session.user.email = dbUser.email;
+              session.user.image = dbUser.image;
+            }
+          }
+        } catch (e) {
+          console.error('Failed to fetch user for session callback', e);
         }
 
-        // Ensure all required properties are set
+        // Fallbacks (in case DB fetch fails)
         if (token.id) {
           session.user.id = token.id as string;
         }

@@ -84,16 +84,25 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(poll, { status: 201 });
   } catch (error) {
+    // Enhanced error logging
+    try {
+      const authOptions = await getAuthOptions();
+      const session = await getServerSession(authOptions);
+      console.error("Poll creation failed:", {
+        session,
+        error: error instanceof Error ? error.stack : error,
+      });
+    } catch (e) {
+      console.error("Error logging poll creation failure:", e);
+    }
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation error", details: error.errors },
         { status: 400 }
       );
     }
-
-    console.error("Error creating poll:", error);
     return NextResponse.json(
-      { error: "Failed to create poll" },
+      { error: "Failed to create poll", details: error instanceof Error ? error.message : error },
       { status: 500 }
     );
   }
