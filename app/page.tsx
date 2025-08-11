@@ -20,28 +20,28 @@ import { useTranslations } from "@/lib/tolgee-optimized";
 const features = [
   {
     icon: BarChart3,
-    title: "Create Polls",
-    description: "Create engaging polls with multiple options and real-time results",
+    titleKey: "create_polls",
+    descriptionKey: "create_polls_desc",
     color: "blue"
   },
   {
     icon: Zap,
-    title: "Real-time Results",
-    description: "See results update instantly as votes come in with beautiful visualizations",
+    titleKey: "real_time_results",
+    descriptionKey: "real_time_results_desc",
     color: "purple"
   },
   {
     icon: Shield,
-    title: "Secure Voting",
-    description: "Secure voting system with duplicate vote prevention and session tracking",
+    titleKey: "secure_voting",
+    descriptionKey: "secure_voting_desc",
     color: "green"
   }
 ];
 
 const stats = [
-  { label: "Active Users", value: "Loading...", icon: Users, key: "users" },
-  { label: "Polls Created", value: "Loading...", icon: BarChart3, key: "polls" },
-  { label: "Votes Cast", value: "Loading...", icon: TrendingUp, key: "votes" }
+  { labelKey: "active_users", value: "Loading...", icon: Users, key: "users" },
+  { labelKey: "polls_created", value: "Loading...", icon: BarChart3, key: "polls" },
+  { labelKey: "votes_cast", value: "Loading...", icon: TrendingUp, key: "votes" }
 ];
 
 const containerVariants = {
@@ -130,12 +130,15 @@ export default function HomePage() {
             transition={{ duration: 0.8, ease: easeOut }}
             className="mb-8"
           >
-            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 dark:from-blue-400 dark:via-purple-400 dark:to-blue-600 bg-clip-text text-transparent mb-6 leading-tight">
-              {t('create_manage_polls', 'Create & Manage')}
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
-                {t('polls', 'Polls')}
-              </span>
+            <h1 className="text-6xl md:text-7xl font-bold text-center mb-6 leading-relaxed">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 dark:from-blue-400 dark:via-purple-400 dark:to-blue-600 bg-clip-text text-transparent leading-tight">
+                  {t('create_manage_polls')}
+                </span>
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent leading-tight pb-2">
+                  {t('polls')}
+                </span>
+              </div>
             </h1>
           </motion.div>
           
@@ -187,7 +190,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {realStats.map((stat, index) => (
               <motion.div
-                key={stat.label}
+                key={stat.labelKey}
                 variants={cardVariants}
                 whileHover="hover"
                 className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20 dark:border-gray-700/20 shadow-lg"
@@ -196,7 +199,7 @@ export default function HomePage() {
                   <stat.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{stat.value}</h3>
-                <p className="text-gray-600 dark:text-gray-300 font-medium">{stat.label}</p>
+                <p className="text-gray-600 dark:text-gray-300 font-medium">{t(stat.labelKey)}</p>
               </motion.div>
             ))}
           </div>
@@ -211,17 +214,17 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              {t('why_choose_pollvault', 'Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">PollVault</span>?')}
+              {t('why_choose_pollvault')}
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              {t('built_with_modern_technology', 'Built with modern technology and user experience in mind')}
+              {t('built_with_modern_technology')}
             </p>
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <motion.div
-                key={feature.title}
+                key={feature.titleKey}
                 variants={cardVariants}
                 whileHover="hover"
                 className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-white/20 dark:border-gray-700/20 shadow-lg hover:shadow-2xl transition-all duration-300"
@@ -229,8 +232,8 @@ export default function HomePage() {
                 <div className={`w-16 h-16 bg-gradient-to-br from-${feature.color}-100 to-${feature.color}-200 dark:from-${feature.color}-900 dark:to-${feature.color}-800 rounded-2xl flex items-center justify-center mb-6`}>
                   <feature.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{feature.description}</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t(feature.titleKey)}</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{t(feature.descriptionKey)}</p>
               </motion.div>
             ))}
           </div>
@@ -247,10 +250,10 @@ export default function HomePage() {
             transition={{ delay: 1, duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              {t('ready_to_get_started', 'Ready to Get Started?')}
+              {t('ready_to_get_started')}
             </h2>
             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto text-white">
-              {t('join_thousands_of_users', 'Join thousands of users who are already creating engaging polls and gathering valuable insights')}
+              {t('join_thousands_of_users')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {session ? (
@@ -258,7 +261,7 @@ export default function HomePage() {
                   href="/polls/create"
                   className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
                 >
-                  {t('create_poll_now', 'Create Poll Now')}
+                  {t('create_poll_now')}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               ) : (
@@ -267,15 +270,15 @@ export default function HomePage() {
                     href="/auth/register"
                     className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
                   >
-                    {t('start_creating_polls', 'Start Creating Polls')}
+                    {t('start_creating_polls')}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
                   <Link
                     href="/polls"
                     className="border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
                   >
-            {t('browse_polls', 'Browse Polls')}
-          </Link>
+                    {t('browse_polls')}
+                  </Link>
                 </>
               )}
         </div>

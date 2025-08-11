@@ -190,7 +190,7 @@ export function Navigation() {
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           <User className="w-4 h-4" />
-                          <span>Profile</span>
+                          <span>{t('profile')}</span>
                         </Link>
                         <button
                           onClick={() => {
@@ -200,7 +200,7 @@ export function Navigation() {
                           className="flex items-center space-x-2 w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 transition-colors duration-200"
                         >
                           <LogOut className="w-4 h-4" />
-                          <span>Logout</span>
+                          <span>{t('logout')}</span>
                         </button>
                       </motion.div>
                     )}
@@ -217,13 +217,13 @@ export function Navigation() {
                     href="/auth/login"
                     className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium"
                   >
-                    Login
+                    {t('login')}
                   </Link>
                   <Link
                     href="/auth/register"
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
-                    Sign Up
+                    {t('sign_up')}
                   </Link>
                 </motion.div>
               )}
@@ -308,7 +308,7 @@ export function Navigation() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <User className="w-5 h-5" />
-                      <span>Profile</span>
+                      <span>{t('profile')}</span>
                     </Link>
                     <button
                       onClick={() => {
@@ -318,7 +318,7 @@ export function Navigation() {
                       className="flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-md transition-colors duration-200 w-full"
                     >
                       <LogOut className="w-5 h-5" />
-                      <span>Logout</span>
+                      <span>{t('logout')}</span>
                     </button>
                   </motion.div>
                 ) : (
@@ -333,14 +333,14 @@ export function Navigation() {
                       className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md transition-colors duration-200"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Login
+                      {t('login')}
               </Link>
                     <Link
                       href="/auth/register"
                       className="block px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-center"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Sign Up
+                      {t('sign_up')}
               </Link>
                   </motion.div>
                 )}

@@ -203,7 +203,7 @@ export default function AdminPage() {
             {t('admin_dashboard', 'Admin Dashboard')}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            {t('manage_platform_desc', 'Manage your poll platform, monitor user activity, and analyze engagement metrics')}
+            {t('manage_platform_desc')}
           </p>
         </motion.div>
 
@@ -278,13 +278,11 @@ export default function AdminPage() {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="ghost" className="w-full text-left p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-xl border border-purple-200 dark:border-purple-800 group justify-start">
-                  <div>
-                    <Download className="w-8 h-8 text-purple-600 dark:text-purple-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                    <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">{t('export_results', 'Export Data')}</h3>
-                    <p className="text-sm text-purple-700 dark:text-purple-300/80">{t('download_results', 'Download results')}</p>
-                  </div>
-                </Button>
+                <Link href="/admin/export" className="block p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-xl border border-purple-200 dark:border-purple-800 transition-colors duration-200 group">
+                  <Download className="w-8 h-8 text-purple-600 dark:text-purple-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">{t('export_results', 'Export Data')}</h3>
+                  <p className="text-sm text-purple-700 dark:text-purple-300/80">{t('download_results', 'Download results')}</p>
+                </Link>
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
