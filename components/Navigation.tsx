@@ -101,12 +101,12 @@ export function Navigation() {
 
             {/* Language Switcher */}
             <div className="flex items-center gap-2">
-              <Globe className="w-5 h-5 text-gray-500 dark:text-gray-300" />
+              <Globe className="w-4 h-4 text-gray-500 dark:text-gray-300" />
               <select
                 value={i18n.language}
                 onChange={e => i18n.changeLanguage(e.target.value as "en" | "fr")}
-                className="rounded-lg px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ minWidth: 90 }}
+                className="rounded-md px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                style={{ minWidth: 50 }}
                 title="Change language"
               >
                 {Object.entries(languages).map(([code, label]) => (
