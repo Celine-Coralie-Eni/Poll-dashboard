@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { getAuthConfig } from "./env";
 // verifyPassword function defined at bottom of file
 
 // Helper function to add timeout to async operations
@@ -56,8 +57,11 @@ async function getPrisma() {
 
 export async function getAuthOptions(): Promise<NextAuthOptions> {
   const prisma = await getPrisma();
+  const config = getAuthConfig();
   
   console.log('=== AUTH CONFIGURATION ===');
+  console.log('Environment:', process.env.NODE_ENV);
+  console.log('Base URL:', config.baseUrl);
   console.log('Prisma client available:', !!prisma);
   console.log('Database URL configured:', !!process.env.DATABASE_URL);
   
@@ -98,13 +102,13 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
     providers: [
       // Google OAuth Provider
       GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        clientId: config.google.clientId!,
+        clientSecret: config.google.clientSecret!,
       }),
       // GitHub Provider
       GitHubProvider({
-        clientId: process.env.GITHUB_CLIENT_ID!,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        clientId: config.github.clientId!,
+        clientSecret: config.github.clientSecret!,
       }),
       // Credentials Provider
       CredentialsProvider({
@@ -326,7 +330,17 @@ export async function getAuthOptions(): Promise<NextAuthOptions> {
       },
       async redirect({ url, baseUrl }) {
         console.log("Redirect callback:", { url, baseUrl });
-        // Always redirect to homepage after successful sign in
+        
+        // Handle different environments
+        if (url.startsWith('/')) {
+          // Relative URL - redirect to base URL
+          return `${baseUrl}${url}`;
+        } else if (new URL(url).origin === baseUrl) {
+          // Same origin - allow the redirect
+          return url;
+        }
+        
+        // Default: redirect to homepage
         return `${baseUrl}/`;
       },
     },
