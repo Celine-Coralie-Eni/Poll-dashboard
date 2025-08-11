@@ -92,18 +92,28 @@ export default function HomePage() {
   const [realStats, setRealStats] = useState(stats);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  console.log('HomePage rendering:', { t: !!t, session: !!session, isInitialLoad });
+
   useEffect(() => {
-    // Check if this is the initial page load (not navigation from other pages)
-    const hasVisited = sessionStorage.getItem('hasVisitedHome');
+    // Temporarily disable session storage logic to debug
+    setIsInitialLoad(false);
     
-    if (hasVisited) {
-      // User has been here before, no animations
-      setIsInitialLoad(false);
-    } else {
-      // First time visiting, mark as visited and show animations
-      sessionStorage.setItem('hasVisitedHome', 'true');
-      setIsInitialLoad(true);
-    }
+    // try {
+    //   // Check if this is the initial page load (not navigation from other pages)
+    //   const hasVisited = sessionStorage.getItem('hasVisitedHome');
+    //   
+    //   if (hasVisited) {
+    //     // User has been here before, no animations
+    //     setIsInitialLoad(false);
+    //   } else {
+    //     // First time visiting, mark as visited and show animations
+    //     sessionStorage.setItem('hasVisitedHome', 'true');
+    //     setIsInitialLoad(true);
+    //   }
+    // } catch (error) {
+    //   console.error('Session storage error:', error);
+    //   setIsInitialLoad(false);
+    // }
   }, []);
 
   useEffect(() => {
@@ -126,6 +136,18 @@ export default function HomePage() {
 
     fetchStats();
   }, []);
+
+  // Add error boundary
+  if (!t) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <h1>Loading translations...</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
