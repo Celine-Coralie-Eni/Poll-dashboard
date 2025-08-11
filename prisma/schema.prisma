@@ -20,6 +20,7 @@ model User {
   votes         Vote[]
   accounts      Account[] // OAuth accounts
   sessions      Session[] // User sessions
+  polls         Poll[]    @relation("PollCreator")
 
   @@map("users")
 }
@@ -72,6 +73,9 @@ model Poll {
   description String?
   options     Option[]
   votes       Vote[]
+  // Track creator when available (OAuth users may not always be present)
+  createdById String?
+  creator     User?    @relation("PollCreator", fields: [createdById], references: [id])
 
   @@map("polls")
 }

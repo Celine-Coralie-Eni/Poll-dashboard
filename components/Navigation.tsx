@@ -252,11 +252,11 @@ export function Navigation() {
                     >
                       <item.icon className="w-5 h-5" />
                       <span>{item.label}</span>
-                    </Link>
+        </Link>
                   </motion.div>
                 ))}
 
-                {session?.user?.role === "ADMIN" && (
+          {session?.user?.role === "ADMIN" && (
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -273,7 +273,7 @@ export function Navigation() {
                   </motion.div>
                 )}
 
-                {session ? (
+          {session ? (
                   <motion.div
                     className="border-t border-gray-200 dark:border-gray-600 pt-2"
                     initial={{ opacity: 0, x: -20 }}
@@ -282,7 +282,7 @@ export function Navigation() {
                   >
                     <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
                       Signed in as {session.user?.name}
-                    </div>
+                  </div>
                     <Link
                       href="/profile"
                       className="flex items-center space-x-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-md transition-colors duration-200"
@@ -315,17 +315,17 @@ export function Navigation() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Login
-                    </Link>
+              </Link>
                     <Link
                       href="/auth/register"
                       className="block px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-center"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Sign Up
-                    </Link>
+              </Link>
                   </motion.div>
                 )}
-              </div>
+            </div>
             </motion.div>
           )}
         </AnimatePresence>

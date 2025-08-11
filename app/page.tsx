@@ -4,6 +4,7 @@ import { Navigation } from "@/components/Navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { motion, easeOut } from "framer-motion";
+import { useState, useEffect } from "react";
 import { 
   ArrowRight, 
   BarChart3, 
@@ -37,9 +38,9 @@ const features = [
 ];
 
 const stats = [
-  { label: "Active Users", value: "1,234+", icon: Users },
-  { label: "Polls Created", value: "5,678+", icon: BarChart3 },
-  { label: "Votes Cast", value: "12,345+", icon: TrendingUp }
+  { label: "Active Users", value: "Loading...", icon: Users, key: "users" },
+  { label: "Polls Created", value: "Loading...", icon: BarChart3, key: "polls" },
+  { label: "Votes Cast", value: "Loading...", icon: TrendingUp, key: "votes" }
 ];
 
 const containerVariants = {
@@ -86,6 +87,28 @@ const cardVariants = {
 
 export default function HomePage() {
   const { data: session } = useSession();
+  const [realStats, setRealStats] = useState(stats);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/admin/stats');
+        if (response.ok) {
+          const data = await response.json();
+          setRealStats([
+            { ...stats[0], value: `${data.totalUsers}+` },
+            { ...stats[1], value: `${data.totalPolls}+` },
+            { ...stats[2], value: `${data.totalVotes}+` }
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+        // Keep the loading state if fetch fails
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -144,7 +167,7 @@ export default function HomePage() {
                   href="/auth/register"
                   className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center"
                 >
-                  Get Started Free
+                  Get Started
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <Link
@@ -161,7 +184,7 @@ export default function HomePage() {
         {/* Stats Section */}
         <motion.section variants={itemVariants} className="mb-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
+            {realStats.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 variants={cardVariants}

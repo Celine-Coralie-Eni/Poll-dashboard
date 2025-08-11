@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
       data: {
         title: validatedData.title,
         description: validatedData.description,
+        createdById: session.user.id,
         options: {
           create: validatedData.options.map((text) => ({ text })),
         },

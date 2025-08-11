@@ -44,6 +44,7 @@ export async function GET() {
         select: {
           id: true,
           title: true,
+          createdAt: true,
           _count: { select: { votes: true } }
         }
       })
@@ -60,7 +61,8 @@ export async function GET() {
       topPolls: topPolls.map(poll => ({
         id: poll.id,
         title: poll.title,
-        voteCount: poll._count.votes
+        votes: poll._count.votes,
+        createdAt: poll.createdAt
       })),
       growth: {
         newUsersLast30Days

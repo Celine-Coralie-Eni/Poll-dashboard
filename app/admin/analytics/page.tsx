@@ -69,12 +69,12 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Analytics Dashboard</h1>
-          <Link href="/admin" className="btn btn-outline">Back to Dashboard</Link>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
+          <Link href="/admin" className="inline-flex items-center px-4 py-2 border-2 border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">Back to Dashboard</Link>
         </div>
 
         {loading ? (
@@ -84,74 +84,60 @@ export default function AnalyticsPage() {
         ) : analytics ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-              <div className="card bg-base-100 shadow-xl">
-                <div className="card-body text-center">
-                  <div className="text-3xl mb-2">👥</div>
-                  <h3 className="card-title justify-center">Total Users</h3>
-                  <p className="text-3xl font-bold text-primary">{analytics.overview.totalUsers}</p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <div className="text-3xl mb-2">👥</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Users</h3>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{analytics.overview.totalUsers}</p>
               </div>
-              <div className="card bg-base-100 shadow-xl">
-                <div className="card-body text-center">
-                  <div className="text-3xl mb-2">📊</div>
-                  <h3 className="card-title justify-center">Total Polls</h3>
-                  <p className="text-3xl font-bold text-primary">{analytics.overview.totalPolls}</p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <div className="text-3xl mb-2">📊</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Polls</h3>
+                <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{analytics.overview.totalPolls}</p>
               </div>
-              <div className="card bg
--base-100 shadow-xl">
-                <div className="card-body text-center">
-                  <div className="text-3xl mb-2">🗳️</div>
-                  <h3 className="card-title justify-center">Total Votes</h3>
-                  <p className="text-3xl font-bold text-primary">{analytics.overview.totalVotes}</p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <div className="text-3xl mb-2">🗳️</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Votes</h3>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{analytics.overview.totalVotes}</p>
               </div>
-              <div className="card bg-base-100 shadow-xl">
-                <div className="card-body text-center">
-                  <div className="text-3xl mb-2">✅</div>
-                  <h3 className="card-title justify-center">Active Polls</h3>
-                  <p className="text-3xl font-bold text-primary">{analytics.overview.activePolls}</p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <div className="text-3xl mb-2">✅</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Active Polls</h3>
+                <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{analytics.overview.activePolls}</p>
               </div>
-              <div className="card bg-base-100 shadow-xl">
-                <div className="card-body text-center">
-                  <div className="text-3xl mb-2">📈</div>
-                  <h3 className="card-title justify-center">New Users (30d)</h3>
-                  <p className="text-3xl font-bold text-primary">{analytics.growth.newUsersLast30Days}</p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <div className="text-3xl mb-2">📈</div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">New Users (30d)</h3>
+                <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{analytics.growth.newUsersLast30Days}</p>
               </div>
             </div>
 
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-2xl mb-6">Top Polls by Votes</h2>
-                <div className="overflow-x-auto">
-                  <table className="table table-zebra">
-                    <thead>
-                      <tr>
-                        <th>Poll Title</th>
-                        <th>Total Votes
-</th>
-                        <th>Created Date</th>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Top Polls by Votes</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Poll Title</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Total Votes</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Created Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.topPolls.map((poll, index) => (
+                      <tr key={poll.id} className={`${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-700' : 'bg-white dark:bg-gray-800'} border-b border-gray-200 dark:border-gray-700`}>
+                          <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{poll.title}</td>
+                        <td className="py-3 px-4 text-gray-900 dark:text-white">{poll.votes}</td>
+                        <td className="py-3 px-4 text-gray-900 dark:text-white">{poll.createdAt ? new Date(poll.createdAt).toLocaleDateString() : '-'}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {analytics.topPolls.map((poll) => (
-                        <tr key={poll.id}>
-                          <td className="font-medium">{poll.title}</td>
-                          <td>{poll.votes}</td>
-                          <td>{new Date(poll.createdAt).toLocaleDateString()}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </>
         ) : (
           <div className="text-center">
-            <p>Failed to load analytics data.</p>
+            <p className="text-gray-900 dark:text-white">Failed to load analytics data.</p>
           </div>
         )}
       </main>

@@ -3,17 +3,42 @@
 import { Navigation } from "@/components/Navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [userStats, setUserStats] = useState({
+    pollsCreated: 0,
+    votesCast: 0
+  });
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth/login");
     }
   }, [status, router]);
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      if (session?.user?.id) {
+        try {
+          const response = await fetch(`/api/admin/users/${session.user.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setUserStats({
+              pollsCreated: data.pollsCreated || 0,
+              votesCast: data.votesCast || 0
+            });
+          }
+        } catch (error) {
+          console.error('Failed to fetch user stats:', error);
+        }
+      }
+    };
+
+    fetchUserStats();
+  }, [session]);
 
   if (status === "loading") {
     return (
@@ -32,97 +57,97 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h1 className="card-title text-3xl justify-center mb-8">
-                Profile
-              </h1>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+            <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
+              Profile
+            </h1>
 
-              <div className="space-y-6">
-                {/* Profile Information */}
-                <div className="bg-base-200 p-6 rounded-lg">
-                  <h2 className="text-xl font-semibold mb-4">
-                    Account Information
-                  </h2>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Name:</span>
-                      <span>{session.user?.name || "Not provided"}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Email:</span>
-                      <span>{session.user?.email}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Role:</span>
-                      <span className="badge badge-primary">
-                        {(session as any)?.user?.role || "User"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Account Status:</span>
-                      <span className="badge badge-success">Active</span>
-                    </div>
+            <div className="space-y-6">
+              {/* Profile Information */}
+              <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                  Account Information
+                </h2>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
+                    <span className="text-gray-900 dark:text-white">{session.user?.name || "Not provided"}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                    <span className="text-gray-900 dark:text-white">{session.user?.email}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Role:</span>
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      {(session as any)?.user?.role || "User"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Account Status:</span>
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                      Active
+                    </span>
                   </div>
                 </div>
+              </div>
 
-                {/* Quick Actions */}
-                <div className="bg-base-200 p-6 rounded-lg">
-                  <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Quick Actions */}
+              <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <button
+                    onClick={() => router.push("/polls")}
+                    className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  >
+                    View Polls
+                  </button>
+                  <button
+                    onClick={() => router.push("/polls/create")}
+                    className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  >
+                    Create Poll
+                  </button>
+                  {(session as any)?.user?.role === "ADMIN" && (
                     <button
-                      onClick={() => router.push("/polls")}
-                      className="btn btn-primary"
+                      onClick={() => router.push("/admin")}
+                      className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
                     >
-                      View Polls
+                      Admin Dashboard
                     </button>
-                    <button
-                      onClick={() => router.push("/polls/create")}
-                      className="btn btn-secondary"
-                    >
-                      Create Poll
-                    </button>
-                    {(session as any)?.user?.role === "ADMIN" && (
-                      <button
-                        onClick={() => router.push("/admin")}
-                        className="btn btn-accent"
-                      >
-                        Admin Dashboard
-                      </button>
-                    )}
-                    <button
-                      onClick={handleSignOut}
-                      className="btn btn-outline btn-error"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
+                  )}
+                  <button
+                    onClick={handleSignOut}
+                    className="inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors duration-200"
+                  >
+                    Sign Out
+                  </button>
                 </div>
+              </div>
 
-                {/* Account Statistics */}
-                <div className="bg-base-200 p-6 rounded-lg">
-                  <h2 className="text-xl font-semibold mb-4">
-                    Account Statistics
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="stat bg-base-100 rounded-lg">
-                      <div className="stat-title">Polls Created</div>
-                      <div className="stat-value text-primary">0</div>
-                    </div>
-                    <div className="stat bg-base-100 rounded-lg">
-                      <div className="stat-title">Votes Cast</div>
-                      <div className="stat-value text-secondary">0</div>
-                    </div>
-                    <div className="stat bg-base-100 rounded-lg">
-                      <div className="stat-title">Member Since</div>
-                      <div className="stat-value text-accent text-lg">
-                        {new Date().toLocaleDateString()}
-                      </div>
+              {/* Account Statistics */}
+              <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                  Account Statistics
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Polls Created</div>
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{userStats.pollsCreated}</div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Votes Cast</div>
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{userStats.votesCast}</div>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Member Since</div>
+                    <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                      {new Date().toLocaleDateString()}
                     </div>
                   </div>
                 </div>

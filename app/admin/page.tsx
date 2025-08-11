@@ -185,7 +185,7 @@ export default function AdminPage() {
           <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
             Admin Dashboard
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Manage your poll platform, monitor user activity, and analyze engagement metrics
           </p>
         </motion.div>
@@ -198,91 +198,91 @@ export default function AdminPage() {
           <motion.div
             variants={cardVariants}
             whileHover="hover"
-            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Users</h3>
-            <p className="text-3xl font-bold text-blue-600">{stats?.totalUsers || 0}</p>
-            <p className="text-sm text-gray-500 mt-2">Active platform users</p>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Users</h3>
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats?.totalUsers || 0}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Active platform users</p>
           </motion.div>
 
           <motion.div
             variants={cardVariants}
             whileHover="hover"
-            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <BarChart3 className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
               <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Polls</h3>
-            <p className="text-3xl font-bold text-purple-600">{stats?.totalPolls || 0}</p>
-            <p className="text-sm text-gray-500 mt-2">Created polls</p>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Polls</h3>
+            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats?.totalPolls || 0}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Created polls</p>
           </motion.div>
 
           <motion.div
             variants={cardVariants}
             whileHover="hover"
-            className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <Vote className="w-6 h-6 text-green-600" />
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+                <Vote className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
               <TrendingUp className="w-5 h-5 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Votes</h3>
-            <p className="text-3xl font-bold text-green-600">{stats?.totalVotes || 0}</p>
-            <p className="text-sm text-gray-500 mt-2">Cast votes</p>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Votes</h3>
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats?.totalVotes || 0}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Cast votes</p>
           </motion.div>
         </motion.div>
 
         {/* Quick Actions */}
         <motion.div variants={itemVariants} className="mb-12">
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <Activity className="w-6 h-6 mr-3 text-blue-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+              <Activity className="w-6 h-6 mr-3 text-blue-600 dark:text-blue-400" />
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/polls/create" className="block p-4 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-200 transition-colors duration-200 group">
-                  <Plus className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-blue-900 mb-1">Create Poll</h3>
-                  <p className="text-sm text-blue-700">Start a new poll</p>
+                <Link href="/polls/create" className="block p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl border border-blue-200 dark:border-blue-800 transition-colors duration-200 group">
+                  <Plus className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">Create Poll</h3>
+                  <p className="text-sm text-blue-700 dark:text-blue-300/80">Start a new poll</p>
                 </Link>
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="ghost" className="w-full text-left p-4 bg-purple-50 hover:bg-purple-100 rounded-xl border border-purple-200 group justify-start">
+                <Button variant="ghost" className="w-full text-left p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-xl border border-purple-200 dark:border-purple-800 group justify-start">
                   <div>
-                    <Download className="w-8 h-8 text-purple-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                    <h3 className="font-semibold text-purple-900 mb-1">Export Data</h3>
-                    <p className="text-sm text-purple-700">Download results</p>
+                    <Download className="w-8 h-8 text-purple-600 dark:text-purple-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                    <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">Export Data</h3>
+                    <p className="text-sm text-purple-700 dark:text-purple-300/80">Download results</p>
                   </div>
                 </Button>
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/admin/users" className="block p-4 bg-green-50 hover:bg-green-100 rounded-xl border border-green-200 transition-colors duration-200 group">
-                  <Users className="w-8 h-8 text-green-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-green-900 mb-1">Manage Users</h3>
-                  <p className="text-sm text-green-700">User administration</p>
+                <Link href="/admin/users" className="block p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-xl border border-green-200 dark:border-green-800 transition-colors duration-200 group">
+                  <Users className="w-8 h-8 text-green-600 dark:text-green-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-green-900 dark:text-green-200 mb-1">Manage Users</h3>
+                  <p className="text-sm text-green-700 dark:text-green-300/80">User administration</p>
                 </Link>
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/admin/analytics" className="block p-4 bg-orange-50 hover:bg-orange-100 rounded-xl border border-orange-200 transition-colors duration-200 group">
-                  <BarChart3 className="w-8 h-8 text-orange-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-                  <h3 className="font-semibold text-orange-900 mb-1">Analytics</h3>
-                  <p className="text-sm text-orange-700">View insights</p>
+                <Link href="/admin/analytics" className="block p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-xl border border-orange-200 dark:border-orange-800 transition-colors duration-200 group">
+                  <BarChart3 className="w-8 h-8 text-orange-600 dark:text-orange-300 mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-1">Analytics</h3>
+                  <p className="text-sm text-orange-700 dark:text-orange-300/80">View insights</p>
                 </Link>
               </motion.div>
             </div>
@@ -291,10 +291,10 @@ export default function AdminPage() {
 
         {/* Recent Polls */}
         <motion.div variants={itemVariants}>
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <div className="p-8 border-b border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-                <BarChart3 className="w-6 h-6 mr-3 text-blue-600" />
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div className="p-8 border-b border-gray-100 dark:border-gray-700">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+                <BarChart3 className="w-6 h-6 mr-3 text-blue-600 dark:text-blue-400" />
                 Recent Polls
               </h2>
             </div>
