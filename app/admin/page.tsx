@@ -297,36 +297,6 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
-
-        {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link
-            href="/admin/analytics"
-            className="block p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-xl border border-orange-200 dark:border-orange-800 transition-colors duration-200 group"
-          >
-            <BarChart3 className="w-8 h-8 text-orange-600 dark:text-orange-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-1 text-center">{t('analytics', 'Analytics')}</h3>
-            <p className="text-sm text-orange-700 dark:text-orange-300/80 text-center">{t('viewInsights', 'View insights')}</p>
-          </Link>
-
-          <Link
-            href="/admin/users"
-            className="block p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-xl border border-green-200 dark:border-green-800 transition-colors duration-200 group"
-          >
-            <Users className="w-8 h-8 text-green-600 dark:text-green-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-green-900 dark:text-green-200 mb-1 text-center">{t('manageUsers', 'Manage Users')}</h3>
-            <p className="text-sm text-green-700 dark:text-green-300/80 text-center">{t('userAdministration', 'User administration')}</p>
-          </Link>
-
-          <Link
-            href="/polls/create"
-            className="block p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl border border-blue-200 dark:border-blue-800 transition-colors duration-200 group"
-          >
-            <Plus className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1 text-center">{t('createPoll', 'Create Poll')}</h3>
-            <p className="text-sm text-blue-700 dark:text-blue-300/80 text-center">{t('startNewPoll', 'Start a new poll')}</p>
-          </Link>
-        </div>
       </main>
     </div>
   );
