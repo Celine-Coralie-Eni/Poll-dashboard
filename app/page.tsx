@@ -90,6 +90,21 @@ export default function HomePage() {
   const { t } = useTranslations();
   const { data: session } = useSession();
   const [realStats, setRealStats] = useState(stats);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    // Check if this is the initial page load (not navigation from other pages)
+    const hasVisited = sessionStorage.getItem('hasVisitedHome');
+    
+    if (hasVisited) {
+      // User has been here before, no animations
+      setIsInitialLoad(false);
+    } else {
+      // First time visiting, mark as visited and show animations
+      sessionStorage.setItem('hasVisitedHome', 'true');
+      setIsInitialLoad(true);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -118,16 +133,19 @@ export default function HomePage() {
       
       <motion.main
         className="container mx-auto px-4 py-8"
-        variants={containerVariants}
-        initial="hidden"
+        variants={isInitialLoad ? containerVariants : undefined}
+        initial={isInitialLoad ? "hidden" : "visible"}
         animate="visible"
       >
         {/* Hero Section */}
-        <motion.section variants={itemVariants} className="text-center mb-20">
+        <motion.section 
+          variants={isInitialLoad ? itemVariants : undefined}
+          className="text-center mb-20"
+        >
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={isInitialLoad ? { scale: 0.8, opacity: 0 } : { scale: 1, opacity: 1 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: easeOut }}
+            transition={isInitialLoad ? { duration: 0.8, ease: easeOut } : { duration: 0 }}
             className="mb-8"
           >
             <h1 className="text-6xl md:text-7xl font-bold text-center mb-6 leading-relaxed">
@@ -143,18 +161,18 @@ export default function HomePage() {
           </motion.div>
           
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={isInitialLoad ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            transition={isInitialLoad ? { delay: 0.3, duration: 0.6 } : { duration: 0 }}
             className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
           >
             {t('build_polls', 'Build engaging polls with real-time results, beautiful visualizations, and secure voting. Perfect for teams, events, and community engagement.')}
           </motion.p>
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={isInitialLoad ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={isInitialLoad ? { delay: 0.5, duration: 0.6 } : { duration: 0 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             {session ? (
@@ -186,12 +204,15 @@ export default function HomePage() {
         </motion.section>
 
         {/* Stats Section */}
-        <motion.section variants={itemVariants} className="mb-20">
+        <motion.section 
+          variants={isInitialLoad ? itemVariants : undefined}
+          className="mb-20"
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {realStats.map((stat, index) => (
               <motion.div
                 key={stat.labelKey}
-                variants={cardVariants}
+                variants={isInitialLoad ? cardVariants : undefined}
                 whileHover="hover"
                 className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20 dark:border-gray-700/20 shadow-lg"
               >
@@ -206,11 +227,14 @@ export default function HomePage() {
         </motion.section>
 
         {/* Features Section */}
-        <motion.section variants={itemVariants} className="mb-20">
+        <motion.section 
+          variants={isInitialLoad ? itemVariants : undefined}
+          className="mb-20"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={isInitialLoad ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
+            transition={isInitialLoad ? { delay: 0.8, duration: 0.6 } : { duration: 0 }}
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
@@ -225,7 +249,7 @@ export default function HomePage() {
             {features.map((feature, index) => (
               <motion.div
                 key={feature.titleKey}
-                variants={cardVariants}
+                variants={isInitialLoad ? cardVariants : undefined}
                 whileHover="hover"
                 className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-white/20 dark:border-gray-700/20 shadow-lg hover:shadow-2xl transition-all duration-300"
               >
@@ -241,13 +265,13 @@ export default function HomePage() {
 
         {/* CTA Section */}
         <motion.section
-          variants={itemVariants}
+          variants={isInitialLoad ? itemVariants : undefined}
           className="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white"
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
+            initial={isInitialLoad ? { scale: 0.9, opacity: 0 } : { scale: 1, opacity: 1 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 1, duration: 0.6 }}
+            transition={isInitialLoad ? { delay: 1, duration: 0.6 } : { duration: 0 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               {t('ready_to_get_started')}
