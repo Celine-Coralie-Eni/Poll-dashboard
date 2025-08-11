@@ -3,7 +3,9 @@
 import { Navigation } from "@/components/Navigation";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 interface Poll {
   id: string;
@@ -23,6 +25,8 @@ interface Poll {
 
 export default function PollResultsPage() {
   const params = useParams();
+  const { data: session } = useSession();
+  const { t } = useTranslations();
   const [poll, setPoll] = useState<Poll | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -97,6 +101,36 @@ export default function PollResultsPage() {
   }
 
   const totalVotes = poll._count.votes;
+
+  // Check if user is authenticated
+  if (!session) {
+    return (
+      <div className="min-h-screen bg-base-200">
+        <Navigation />
+        <main className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <Link href="/polls" className="btn btn-ghost mb-6">
+              ← Back to Polls
+            </Link>
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body text-center py-12">
+                <h1 className="text-2xl font-bold mb-4">{t('results_restricted', 'Results Restricted')}</h1>
+                <p className="text-lg mb-6">{t('login_to_see_results', 'Login to see poll results and insights')}</p>
+                <div className="flex gap-4 justify-center">
+                  <Link href="/auth/login" className="btn btn-primary">
+                    {t('login', 'Login')}
+                  </Link>
+                  <Link href="/auth/register" className="btn btn-secondary">
+                    {t('sign_up', 'Sign Up')}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-200">

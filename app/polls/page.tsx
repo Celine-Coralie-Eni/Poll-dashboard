@@ -114,44 +114,49 @@ export default function PollsPage() {
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{poll.title}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {poll.options.length} {t('options', 'options')} • {poll._count.votes} {t('votes', 'votes')}
+                    {poll.options.length} {t('options', 'options')}
+                    {session && (
+                      <> • {poll._count.votes} {t('votes', 'votes')}</>
+                    )}
                   </p>
 
-                  {/* Show top 3 options with percentages */}
-                  <div className="space-y-3">
-                    {poll.options.slice(0, 3).map((option) => {
-                      const percentage =
-                        poll._count.votes > 0
-                          ? Math.round(
-                              (option._count.votes / poll._count.votes) * 100
-                            )
-                          : 0;
+                  {/* Show top 3 options with percentages only for logged-in users */}
+                  {session && (
+                    <div className="space-y-3">
+                      {poll.options.slice(0, 3).map((option) => {
+                        const percentage =
+                          poll._count.votes > 0
+                            ? Math.round(
+                                (option._count.votes / poll._count.votes) * 100
+                              )
+                            : 0;
 
-                      return (
-                        <div
-                          key={option.id}
-                          className="space-y-2"
-                        >
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-900 dark:text-white">{option.text}</span>
-                            <span className="text-gray-600 dark:text-gray-400 font-medium">{percentage}%</span>
+                        return (
+                          <div
+                            key={option.id}
+                            className="space-y-2"
+                          >
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-900 dark:text-white">{option.text}</span>
+                              <span className="text-gray-600 dark:text-gray-400 font-medium">{percentage}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                              <div
+                                className="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${percentage}%` }}
+                              ></div>
+                            </div>
                           </div>
-                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div
-                              className="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${percentage}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
 
-                    {poll.options.length > 3 && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        +{poll.options.length - 3} {t('more_options', 'more options')}
-                      </p>
-                    )}
-                  </div>
+                      {poll.options.length > 3 && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          +{poll.options.length - 3} {t('more_options', 'more options')}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="flex justify-end gap-3 pt-4">
                     <Link
@@ -160,7 +165,7 @@ export default function PollsPage() {
                     >
                       {t('vote', 'Vote')}
                     </Link>
-                    {poll._count.votes > 0 && (
+                    {session && poll._count.votes > 0 && (
                       <Link
                         href={`/polls/${poll.id}/results`}
                         className="inline-flex items-center px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white text-sm font-medium rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-200"
