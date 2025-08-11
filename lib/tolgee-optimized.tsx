@@ -8,8 +8,8 @@ import frTranslations from './translations/fr.json';
 
 // Language definitions - only French and English
 export const languages = {
-  en: 'English',
-  fr: 'Français',
+  en: 'en',
+  fr: 'fr',
 };
 
 export type Language = keyof typeof languages;
