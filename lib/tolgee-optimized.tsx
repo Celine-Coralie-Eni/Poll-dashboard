@@ -67,9 +67,20 @@ export const TolgeeAppProvider = TolgeeProvider;
 export const useTranslations = () => {
   const { currentLanguage, setCurrentLanguage } = useContext(LanguageContext);
 
-  const t = (key: string, defaultValue?: string) => {
-    const translation = translations[currentLanguage][key as keyof typeof translations[typeof currentLanguage]];
-    return translation || defaultValue || key;
+  const t = (key: string, defaultValue?: string, variables?: Record<string, any>) => {
+    let translation = translations[currentLanguage][key as keyof typeof translations[typeof currentLanguage]];
+    if (!translation) {
+      translation = defaultValue || key;
+    }
+    
+    // Handle interpolation if variables are provided
+    if (variables && typeof translation === 'string') {
+      return translation.replace(/\{(\w+)\}/g, (match, variableName) => {
+        return variables[variableName] !== undefined ? String(variables[variableName]) : match;
+      });
+    }
+    
+    return translation;
   };
 
   const i18n = {
