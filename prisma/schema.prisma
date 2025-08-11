@@ -1,7 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
-  // Include binaries for common serverless runtimes
-  binaryTargets = ["native", "rhel-openssl-3.0.x", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+  // Force Vercel to use the correct engine
+  binaryTargets = ["rhel-openssl-3.0.x"]
   // Use binary engine to avoid Node-API library issues on serverless
   engineType    = "binary"
 }
