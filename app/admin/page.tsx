@@ -364,6 +364,15 @@ export default function AdminPage() {
                             >
                               <Edit className="w-4 h-4" />
                             </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors duration-200"
+                              onClick={() => setDeletePollId(poll.id)}
+                              title="Delete Poll"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </motion.button>
                           </div>
                         </td>
                       </motion.tr>
