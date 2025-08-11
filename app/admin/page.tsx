@@ -146,68 +146,75 @@ export default function AdminPage() {
           </p>
         </div>
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <TrendingUp className="w-5 h-5 text-green-500" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('totalUsers', 'Total Users')}</h3>
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats?.totalUsers || 0}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('activePlatformUsers', 'Active platform users')}</p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <TrendingUp className="w-5 h-5 text-green-500" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('totalPolls', 'Total Polls')}</h3>
+            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats?.totalPolls || 0}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('createdPolls', 'Created polls')}</p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+                <Vote className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <TrendingUp className="w-5 h-5 text-green-500" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('totalVotes', 'Total Votes')}</h3>
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats?.totalVotes || 0}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('castVotes', 'Cast votes')}</p>
+          </div>
+        </div>
+
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {t('totalUsers', 'Total Users')}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {stats?.totalUsers || 0}
-                </p>
+        <div className="mb-12">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+              <Activity className="w-6 h-6 mr-3 text-blue-600 dark:text-blue-400" />
+              {t('quickActions', 'Quick Actions')}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="block p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl border border-blue-200 dark:border-blue-800 transition-colors duration-200 group">
+                <Plus className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1 text-center">{t('createPoll', 'Create Poll')}</h3>
+                <p className="text-sm text-blue-700 dark:text-blue-300/80 text-center">{t('startNewPoll', 'Start a new poll')}</p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {t('totalPolls', 'Total Polls')}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {stats?.totalPolls || 0}
-                </p>
+              <div className="block p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-xl border border-purple-200 dark:border-purple-800 transition-colors duration-200 group">
+                <Download className="w-8 h-8 text-purple-600 dark:text-purple-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-semibold text-purple-900 dark:text-purple-200 mb-1 text-center">{t('exportResults', 'Export Data')}</h3>
+                <p className="text-sm text-purple-700 dark:text-purple-300/80 text-center">{t('downloadResults', 'Download results')}</p>
               </div>
-              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                <Vote className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {t('totalVotes', 'Total Votes')}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {stats?.totalVotes || 0}
-                </p>
+              <div className="block p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-xl border border-green-200 dark:border-green-800 transition-colors duration-200 group">
+                <Users className="w-8 h-8 text-green-600 dark:text-green-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-semibold text-green-900 dark:text-green-200 mb-1 text-center">{t('manageUsers', 'Manage Users')}</h3>
+                <p className="text-sm text-green-700 dark:text-green-300/80 text-center">{t('userAdministration', 'User administration')}</p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
-                <TrendingUp className="w-8 h-8 text-green-600 dark:text-green-400" />
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {t('activePolls', 'Active Polls')}
-                </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {stats?.recentPolls?.length || 0}
-                </p>
-              </div>
-              <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
-                <Activity className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              <div className="block p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-xl border border-orange-200 dark:border-orange-800 transition-colors duration-200 group">
+                <BarChart3 className="w-8 h-8 text-orange-600 dark:text-orange-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-1 text-center">{t('analytics', 'Analytics')}</h3>
+                <p className="text-sm text-orange-700 dark:text-orange-300/80 text-center">{t('viewInsights', 'View insights')}</p>
               </div>
             </div>
           </div>
@@ -295,53 +302,29 @@ export default function AdminPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Link
             href="/admin/analytics"
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-xl transition-shadow duration-200"
+            className="block p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-xl border border-orange-200 dark:border-orange-800 transition-colors duration-200 group"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {t('analytics', 'Analytics')}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {t('viewDetailedAnalytics', 'View detailed analytics and insights')}
-                </p>
-              </div>
-              <ArrowRight className="w-6 h-6 text-gray-400" />
-            </div>
+            <BarChart3 className="w-8 h-8 text-orange-600 dark:text-orange-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+            <h3 className="font-semibold text-orange-900 dark:text-orange-200 mb-1 text-center">{t('analytics', 'Analytics')}</h3>
+            <p className="text-sm text-orange-700 dark:text-orange-300/80 text-center">{t('viewInsights', 'View insights')}</p>
           </Link>
 
           <Link
             href="/admin/users"
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-xl transition-shadow duration-200"
+            className="block p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-xl border border-green-200 dark:border-green-800 transition-colors duration-200 group"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {t('manageUsers', 'Manage Users')}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {t('manageUserAccounts', 'Manage user accounts and permissions')}
-                </p>
-              </div>
-              <ArrowRight className="w-6 h-6 text-gray-400" />
-            </div>
+            <Users className="w-8 h-8 text-green-600 dark:text-green-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+            <h3 className="font-semibold text-green-900 dark:text-green-200 mb-1 text-center">{t('manageUsers', 'Manage Users')}</h3>
+            <p className="text-sm text-green-700 dark:text-green-300/80 text-center">{t('userAdministration', 'User administration')}</p>
           </Link>
 
           <Link
             href="/polls/create"
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-xl transition-shadow duration-200"
+            className="block p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl border border-blue-200 dark:border-blue-800 transition-colors duration-200 group"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  {t('createPoll', 'Create Poll')}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {t('createNewPoll', 'Create a new poll for your users')}
-                </p>
-              </div>
-              <ArrowRight className="w-6 h-6 text-gray-400" />
-            </div>
+            <Plus className="w-8 h-8 text-blue-600 dark:text-blue-300 mb-3 mx-auto group-hover:scale-110 transition-transform duration-200" />
+            <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-1 text-center">{t('createPoll', 'Create Poll')}</h3>
+            <p className="text-sm text-blue-700 dark:text-blue-300/80 text-center">{t('startNewPoll', 'Start a new poll')}</p>
           </Link>
         </div>
       </main>
