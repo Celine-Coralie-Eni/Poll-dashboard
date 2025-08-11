@@ -125,5 +125,8 @@
   "delete_poll": "Supprimer le Sondage",
   "delete_poll_title": "Supprimer le Sondage",
   "delete_poll_confirmation": "Êtes-vous sûr de vouloir supprimer ce sondage ? Cette action ne peut pas être annulée.",
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "login_to_vote": "Se Connecter pour Voter",
+  "create_account": "Créer un Compte",
+  "need_login_to_vote": "Vous devez être connecté pour voter"
 }

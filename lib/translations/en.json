@@ -125,5 +125,8 @@
   "delete_poll": "Delete Poll",
   "delete_poll_title": "Delete Poll",
   "delete_poll_confirmation": "Are you sure you want to delete this poll? This action cannot be undone.",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "login_to_vote": "Login to Vote",
+  "create_account": "Create Account",
+  "need_login_to_vote": "You need to be logged in to vote"
 }

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useTranslations } from "@/lib/tolgee-optimized";
 
 interface Poll {
   id: string;
@@ -27,6 +28,7 @@ export default function PollPage() {
   const { data: session } = useSession();
   const params = useParams();
   const pollId = params.id as string;
+  const { t } = useTranslations();
 
   const [poll, setPoll] = useState<Poll | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,7 @@ export default function PollPage() {
 
   useEffect(() => {
     fetchPoll();
-  }, [pollId]);
+  }, [pollId, session?.user?.id]);
 
   const fetchPoll = async () => {
     try {
@@ -50,9 +52,13 @@ export default function PollPage() {
       const data = await response.json();
       setPoll(data);
 
-      // Check if user has already voted
-      if (data._count.votes > 0) {
-        setHasVoted(true);
+      // Check if current user has already voted for this poll
+      if (session?.user?.id) {
+        const voteCheckResponse = await fetch(`/api/polls/${pollId}/vote-check`);
+        if (voteCheckResponse.ok) {
+          const voteData = await voteCheckResponse.json();
+          setHasVoted(voteData.hasVoted);
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch poll");
@@ -165,37 +171,53 @@ export default function PollPage() {
             <div className="card bg-base-100 shadow-xl mb-8">
               <div className="card-body">
                 <h2 className="card-title text-xl mb-4">Cast Your Vote</h2>
-                <div className="space-y-3">
-                  {poll.options.map((option) => (
-                    <label
-                      key={option.id}
-                      className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-base-200 transition-colors"
-                    >
-                      <input
-                        type="radio"
-                        name="vote"
-                        value={option.id}
-                        checked={selectedOption === option.id}
-                        onChange={(e) => setSelectedOption(e.target.value)}
-                        className="radio radio-primary"
-                      />
-                      <span className="flex-1">{option.text}</span>
-                    </label>
-                  ))}
-                </div>
-                <div className="card-actions justify-end mt-6">
-                  <button
-                    onClick={handleVote}
-                    disabled={!selectedOption || voting}
-                    className="btn btn-primary"
-                  >
-                    {voting ? (
-                      <span className="loading loading-spinner loading-sm"></span>
-                    ) : (
-                      "Submit Vote"
-                    )}
-                  </button>
-                </div>
+                {!session ? (
+                  <div className="text-center py-8">
+                    <p className="text-lg mb-4">{t('need_login_to_vote')}</p>
+                    <div className="flex gap-4 justify-center">
+                      <Link href="/auth/login" className="btn btn-primary">
+                        {t('login_to_vote')}
+                      </Link>
+                      <Link href="/auth/register" className="btn btn-secondary">
+                        {t('create_account')}
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-3">
+                      {poll.options.map((option) => (
+                        <label
+                          key={option.id}
+                          className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-base-200 transition-colors"
+                        >
+                          <input
+                            type="radio"
+                            name="vote"
+                            value={option.id}
+                            checked={selectedOption === option.id}
+                            onChange={(e) => setSelectedOption(e.target.value)}
+                            className="radio radio-primary"
+                          />
+                          <span className="flex-1">{option.text}</span>
+                        </label>
+                      ))}
+                    </div>
+                    <div className="card-actions justify-end mt-6">
+                      <button
+                        onClick={handleVote}
+                        disabled={!selectedOption || voting}
+                        className="btn btn-primary"
+                      >
+                        {voting ? (
+                          <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                          "Submit Vote"
+                        )}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
