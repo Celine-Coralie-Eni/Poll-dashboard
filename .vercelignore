@@ -1,0 +1,10 @@
+# Don't ignore Prisma files
+!prisma/
+!node_modules/.prisma/
+
+# Standard ignores
+.env*
+.next/
+node_modules/
+.git/
+README.md
