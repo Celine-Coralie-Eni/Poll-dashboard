@@ -41,6 +41,7 @@ export async function GET(
     // there is only one user in the system.
     let pollsCreated = await prisma.poll.count({ where: { createdById: params.id } });
     const votesCast = await prisma.vote.count({ where: { userId: params.id } });
+    const user = await prisma.user.findUnique({ where: { id: params.id }, select: { createdAt: true } });
 
     if (pollsCreated === 0) {
       const totalUsers = await prisma.user.count();
@@ -52,7 +53,8 @@ export async function GET(
 
     return NextResponse.json({
       pollsCreated,
-      votesCast
+      votesCast,
+      createdAt: user?.createdAt || null
     });
 
   } catch (error) {

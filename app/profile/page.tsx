@@ -10,7 +10,8 @@ export default function ProfilePage() {
   const router = useRouter();
   const [userStats, setUserStats] = useState({
     pollsCreated: 0,
-    votesCast: 0
+    votesCast: 0,
+    createdAt: null as string | null,
   });
 
   useEffect(() => {
@@ -28,7 +29,8 @@ export default function ProfilePage() {
             const data = await response.json();
             setUserStats({
               pollsCreated: data.pollsCreated || 0,
-              votesCast: data.votesCast || 0
+              votesCast: data.votesCast || 0,
+              createdAt: data.createdAt || null,
             });
           }
         } catch (error) {
@@ -36,9 +38,27 @@ export default function ProfilePage() {
         }
       }
     };
-
     fetchUserStats();
   }, [session]);
+
+  // Helper to refetch stats (can be called after poll/vote creation)
+  const refetchUserStats = async () => {
+    if (session?.user?.id) {
+      try {
+        const response = await fetch(`/api/admin/users/${session.user.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUserStats({
+            pollsCreated: data.pollsCreated || 0,
+            votesCast: data.votesCast || 0,
+            createdAt: data.createdAt || null,
+          });
+        }
+      } catch (error) {
+        console.error('Failed to refetch user stats:', error);
+      }
+    }
+  };
 
   if (status === "loading") {
     return (
@@ -147,7 +167,7 @@ export default function ProfilePage() {
                   <div className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
                     <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Member Since</div>
                     <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                      {new Date().toLocaleDateString()}
+                      {userStats.createdAt ? new Date(userStats.createdAt).toLocaleDateString() : "-"}
                     </div>
                   </div>
                 </div>

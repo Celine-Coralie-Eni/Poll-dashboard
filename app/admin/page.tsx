@@ -79,6 +79,7 @@ export default function AdminPage() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deletePollId, setDeletePollId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -169,6 +170,20 @@ export default function AdminPage() {
       </div>
     );
   }
+
+  // Delete poll handler
+  const handleDeletePoll = async (pollId: string) => {
+    try {
+      const res = await fetch(`/api/polls/${pollId}`, { method: 'DELETE' });
+      if (res.ok) {
+        setStats((prev) => prev ? { ...prev, recentPolls: prev.recentPolls.filter(p => p.id !== pollId) } : prev);
+      }
+    } catch (e) {
+      // Optionally show error
+    } finally {
+      setDeletePollId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -300,15 +315,15 @@ export default function AdminPage() {
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Title</th>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Created</th>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Votes</th>
-                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Title</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Created</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Votes</th>
+                    <th className="px-8 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                   <AnimatePresence>
                     {stats?.recentPolls.map((poll, index) => (
                       <motion.tr
@@ -316,16 +331,16 @@ export default function AdminPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.3 }}
-                        className="hover:bg-gray-50 transition-colors duration-200"
+                        className="transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         <td className="px-8 py-4">
-                          <div className="font-medium text-gray-900">{poll.title}</div>
+                          <div className="font-medium text-gray-900 dark:text-gray-100">{poll.title}</div>
                         </td>
-                        <td className="px-8 py-4 text-gray-600">
+                        <td className="px-8 py-4 text-gray-600 dark:text-gray-300">
                           {new Date(poll.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-8 py-4">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                             {poll._count.votes} votes
                           </span>
                         </td>
@@ -334,23 +349,20 @@ export default function AdminPage() {
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                              className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg transition-colors duration-200"
+                              onClick={() => window.location.href = `/polls/${poll.id}`}
+                              title="View Poll"
                             >
                               <Eye className="w-4 h-4" />
                             </motion.button>
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200"
+                              className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900 rounded-lg transition-colors duration-200 opacity-50 cursor-not-allowed"
+                              disabled
+                              title="Edit page not available"
                             >
                               <Edit className="w-4 h-4" />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                            >
-                              <Trash2 className="w-4 h-4" />
                             </motion.button>
                           </div>
                         </td>
@@ -370,6 +382,30 @@ export default function AdminPage() {
           </div>
         </motion.div>
       </motion.main>
+
+      {/* Delete Confirmation Modal */}
+      {deletePollId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Delete Poll</h2>
+            <p className="mb-6 text-gray-700 dark:text-gray-300">Are you sure you want to delete this poll? This action cannot be undone.</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+                onClick={() => setDeletePollId(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                onClick={() => handleDeletePoll(deletePollId)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
