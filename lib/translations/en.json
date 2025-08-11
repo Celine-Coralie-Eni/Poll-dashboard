@@ -128,5 +128,9 @@
   "cancel": "Cancel",
   "login_to_vote": "Login to Vote",
   "create_account": "Create Account",
-  "need_login_to_vote": "You need to be logged in to vote"
+  "need_login_to_vote": "You need to be logged in to vote",
+  "create_poll_anonymously": "Create Poll Anonymously",
+  "login_to_save_poll": "Login to save your poll and track results",
+  "results_restricted": "Results Restricted",
+  "login_to_see_results": "Login to see poll results and insights"
 }

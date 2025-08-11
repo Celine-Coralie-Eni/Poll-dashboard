@@ -18,23 +18,8 @@ export default function CreatePollPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect if not authenticated
-  if (!session) {
-    return (
-      <div className="min-h-screen">
-        <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">{t('authentication_required', 'Authentication Required')}</h1>
-            <p className="mb-4">{t('need_login_create_polls', 'You need to be logged in to create polls.')}</p>
-            <Link href="/auth/login">
-              <Button>{t('login', 'Login')}</Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Show login prompt for non-authenticated users but allow them to continue
+  const showLoginPrompt = !session;
 
   const addOption = () => {
     setOptions([...options, ""]);
@@ -115,6 +100,24 @@ export default function CreatePollPage() {
 
             {/* Form Section */}
             <div className="card-body text-gray-900 dark:text-white">
+              {showLoginPrompt && (
+                <div className="alert alert-info mb-6">
+                  <div className="flex items-center justify-between w-full">
+                    <div>
+                      <h3 className="font-semibold">{t('create_poll_anonymously', 'Create Poll Anonymously')}</h3>
+                      <p className="text-sm">{t('login_to_save_poll', 'Login to save your poll and track results')}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Link href="/auth/login" className="btn btn-primary btn-sm">
+                        {t('login', 'Login')}
+                      </Link>
+                      <Link href="/auth/register" className="btn btn-secondary btn-sm">
+                        {t('sign_up', 'Sign Up')}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Poll Title */}
                 <div className="form-control">

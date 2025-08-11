@@ -171,53 +171,37 @@ export default function PollPage() {
             <div className="card bg-base-100 shadow-xl mb-8">
               <div className="card-body">
                 <h2 className="card-title text-xl mb-4">Cast Your Vote</h2>
-                {!session ? (
-                  <div className="text-center py-8">
-                    <p className="text-lg mb-4">{t('need_login_to_vote')}</p>
-                    <div className="flex gap-4 justify-center">
-                      <Link href="/auth/login" className="btn btn-primary">
-                        {t('login_to_vote')}
-                      </Link>
-                      <Link href="/auth/register" className="btn btn-secondary">
-                        {t('create_account')}
-                      </Link>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="space-y-3">
-                      {poll.options.map((option) => (
-                        <label
-                          key={option.id}
-                          className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-base-200 transition-colors"
-                        >
-                          <input
-                            type="radio"
-                            name="vote"
-                            value={option.id}
-                            checked={selectedOption === option.id}
-                            onChange={(e) => setSelectedOption(e.target.value)}
-                            className="radio radio-primary"
-                          />
-                          <span className="flex-1">{option.text}</span>
-                        </label>
-                      ))}
-                    </div>
-                    <div className="card-actions justify-end mt-6">
-                      <button
-                        onClick={handleVote}
-                        disabled={!selectedOption || voting}
-                        className="btn btn-primary"
-                      >
-                        {voting ? (
-                          <span className="loading loading-spinner loading-sm"></span>
-                        ) : (
-                          "Submit Vote"
-                        )}
-                      </button>
-                    </div>
-                  </>
-                )}
+                <div className="space-y-3">
+                  {poll.options.map((option) => (
+                    <label
+                      key={option.id}
+                      className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-base-200 transition-colors"
+                    >
+                      <input
+                        type="radio"
+                        name="vote"
+                        value={option.id}
+                        checked={selectedOption === option.id}
+                        onChange={(e) => setSelectedOption(e.target.value)}
+                        className="radio radio-primary"
+                      />
+                      <span className="flex-1">{option.text}</span>
+                    </label>
+                  ))}
+                </div>
+                <div className="card-actions justify-end mt-6">
+                  <button
+                    onClick={handleVote}
+                    disabled={!selectedOption || voting}
+                    className="btn btn-primary"
+                  >
+                    {voting ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      "Submit Vote"
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -225,35 +209,52 @@ export default function PollPage() {
           {/* Results */}
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <h2 className="card-title text-xl mb-6">
-                {hasVoted ? "Results" : "Current Results"}
-              </h2>
+              {!session ? (
+                <div className="text-center py-8">
+                  <h2 className="card-title text-xl mb-4">{t('results_restricted', 'Results Restricted')}</h2>
+                  <p className="text-lg mb-4">{t('login_to_see_results', 'Login to see poll results and insights')}</p>
+                  <div className="flex gap-4 justify-center">
+                    <Link href="/auth/login" className="btn btn-primary">
+                      {t('login', 'Login')}
+                    </Link>
+                    <Link href="/auth/register" className="btn btn-secondary">
+                      {t('sign_up', 'Sign Up')}
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h2 className="card-title text-xl mb-6">
+                    {hasVoted ? "Results" : "Current Results"}
+                  </h2>
 
-              <div className="space-y-4">
-                {poll.options.map((option) => {
-                  const percentage =
-                    totalVotes > 0
-                      ? Math.round((option._count.votes / totalVotes) * 100)
-                      : 0;
+                  <div className="space-y-4">
+                    {poll.options.map((option) => {
+                      const percentage =
+                        totalVotes > 0
+                          ? Math.round((option._count.votes / totalVotes) * 100)
+                          : 0;
 
-                  return (
-                    <div key={option.id} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">{option.text}</span>
-                        <span className="text-sm opacity-75">
-                          {option._count.votes} votes ({percentage}%)
-                        </span>
-                      </div>
-                      <div className="w-full bg-base-200 rounded-full h-3">
-                        <div
-                          className="bg-primary h-3 rounded-full transition-all duration-500"
-                          style={{ width: `${percentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                      return (
+                        <div key={option.id} className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">{option.text}</span>
+                            <span className="text-sm opacity-75">
+                              {option._count.votes} votes ({percentage}%)
+                            </span>
+                          </div>
+                          <div className="w-full bg-base-200 rounded-full h-3">
+                            <div
+                              className="bg-primary h-3 rounded-full transition-all duration-500"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
 
               <div className="mt-6 pt-6 border-t">
                 <div className="flex justify-between items-center">

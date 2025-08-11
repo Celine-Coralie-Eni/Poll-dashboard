@@ -60,10 +60,6 @@ export async function POST(request: NextRequest) {
     const authOptions = await getAuthOptions();
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = await request.json();
     const validatedData = createPollSchema.parse(body);
 
@@ -72,7 +68,7 @@ export async function POST(request: NextRequest) {
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        createdById: session.user.id,
+        createdById: session?.user?.id || null, // Allow null for anonymous polls
         options: {
           create: validatedData.options.map((text) => ({ text })),
         },

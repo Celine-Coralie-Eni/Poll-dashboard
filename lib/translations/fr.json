@@ -128,5 +128,9 @@
   "cancel": "Annuler",
   "login_to_vote": "Se Connecter pour Voter",
   "create_account": "Créer un Compte",
-  "need_login_to_vote": "Vous devez être connecté pour voter"
+  "need_login_to_vote": "Vous devez être connecté pour voter",
+  "create_poll_anonymously": "Créer un Sondage Anonymement",
+  "login_to_save_poll": "Connectez-vous pour sauvegarder votre sondage et suivre les résultats",
+  "results_restricted": "Résultats Restreints",
+  "login_to_see_results": "Connectez-vous pour voir les résultats du sondage et les insights"
 }

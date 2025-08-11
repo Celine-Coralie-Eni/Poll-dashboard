@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { getAuthOptions } from "@/lib/auth";
+import { getClientIP, generateSessionId } from "@/lib/utils";
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -23,20 +24,20 @@ export async function GET(
   try {
     const authOptions = await getAuthOptions();
     const session = await getServerSession(authOptions);
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ hasVoted: false });
-    }
+    const ipAddress = getClientIP(request);
+    const sessionId = generateSessionId();
 
     const prisma = await getPrisma();
     
-    // Check if user has voted for this specific poll
+    // Check if user has voted for this specific poll (logged in or anonymous)
     const existingVote = await prisma.vote.findFirst({
       where: {
-        userId: session.user.id,
-        option: {
-          pollId: params.id
-        }
+        pollId: params.id,
+        OR: [
+          { userId: session?.user?.id || null },
+          { sessionId: sessionId },
+          { ipAddress: ipAddress },
+        ],
       }
     });
 
