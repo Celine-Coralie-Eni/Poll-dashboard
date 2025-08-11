@@ -2,7 +2,6 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Logo } from "./Logo";
 import { useTheme } from "./ThemeProvider";
 import { 
@@ -54,12 +53,7 @@ export function Navigation() {
   }, []);
 
   return (
-    <motion.nav
-      className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
+    <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
@@ -268,6 +262,6 @@ export function Navigation() {
           </div>
         )}
       </div>
-    </motion.nav>
+    </nav>
   );
 }
