@@ -12,16 +12,15 @@ import {
   LogOut, 
   Menu, 
   X,
-  Settings,
   Moon,
   Sun,
   ChevronDown,
   Globe
 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { useTranslations, languages } from "@/lib/tolgee-optimized";
 
-export function Navigation() {
+const Navigation = memo(function Navigation() {
   const { data: session } = useSession();
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -126,6 +125,7 @@ export function Navigation() {
                       src={session.user.image}
                       alt={session.user.name || "User"}
                       className="w-8 h-8 rounded-full border-2 border-blue-200 dark:border-blue-600"
+                      loading="lazy"
                     />
                   )}
                   <span className="font-medium">{session.user?.name}</span>
@@ -166,7 +166,7 @@ export function Navigation() {
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-lg hover:shadow-xl"
                 >
                   {t('sign_up')}
                 </Link>
@@ -264,4 +264,6 @@ export function Navigation() {
       </div>
     </nav>
   );
-}
+});
+
+export { Navigation };

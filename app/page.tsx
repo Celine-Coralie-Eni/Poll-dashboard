@@ -1,14 +1,11 @@
-"use client";
-
 import { Navigation } from "@/components/Navigation";
+import { Stats } from "@/components/Stats";
 import Link from "next/link";
 import { 
   ArrowRight, 
-  BarChart3, 
-  Users, 
+  BarChart3,
   Shield, 
-  Zap, 
-  TrendingUp
+  Zap
 } from "lucide-react";
 
 const features = [
@@ -33,8 +30,6 @@ const features = [
 ];
 
 export default function HomePage() {
-  console.log('HomePage rendering - basic content version');
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
@@ -77,33 +72,7 @@ export default function HomePage() {
         </section>
 
         {/* Stats Section */}
-        <section className="mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20 dark:border-gray-700/20 shadow-lg">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">100+</h3>
-              <p className="text-gray-600 dark:text-gray-300 font-medium">Active Users</p>
-            </div>
-
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20 dark:border-gray-700/20 shadow-lg">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">500+</h3>
-              <p className="text-gray-600 dark:text-gray-300 font-medium">Polls Created</p>
-            </div>
-
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20 dark:border-gray-700/20 shadow-lg">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">1000+</h3>
-              <p className="text-gray-600 dark:text-gray-300 font-medium">Votes Cast</p>
-            </div>
-          </div>
-        </section>
+        <Stats />
 
         {/* Features Section */}
         <section className="mb-20">

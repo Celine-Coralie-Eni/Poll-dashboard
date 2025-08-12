@@ -85,40 +85,40 @@ export default function CreatePollPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-3xl mx-auto">
           <div className="card bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
             {/* Header Section */}
-            <div className="bg-blue-600 px-8 py-6 rounded-t-2xl">
-              <h1 className="text-3xl font-bold text-white mb-2">
+            <div className="bg-blue-600 px-4 sm:px-8 py-4 sm:py-6 rounded-t-2xl">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                 {t('create_new_poll', 'Create New Poll')}
               </h1>
-              <p className="text-white/90 text-lg">
+              <p className="text-white/90 text-base sm:text-lg">
                 {t('create_new_poll_desc', 'Create a new poll and start collecting responses from your audience.')}
               </p>
             </div>
 
             {/* Form Section */}
-            <div className="card-body text-gray-900 dark:text-white">
+            <div className="card-body text-gray-900 dark:text-white px-4 sm:px-8">
               {showLoginPrompt && (
                 <div className="alert alert-info mb-6">
-                  <div className="flex items-center justify-between w-full">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3">
                     <div>
                       <h3 className="font-semibold">{t('create_poll_anonymously', 'Create Poll Anonymously')}</h3>
                       <p className="text-sm">{t('login_to_save_poll', 'Login to save your poll and track results')}</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Link href="/auth/login" className="btn btn-primary btn-sm">
+                    <div className="flex gap-2 w-full sm:w-auto">
+                      <Link href="/auth/login" className="btn btn-primary btn-sm flex-1 sm:flex-none">
                         {t('login', 'Login')}
                       </Link>
-                      <Link href="/auth/register" className="btn btn-secondary btn-sm">
+                      <Link href="/auth/register" className="btn btn-secondary btn-sm flex-1 sm:flex-none">
                         {t('sign_up', 'Sign Up')}
                       </Link>
                     </div>
                   </div>
                 </div>
               )}
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* Poll Title */}
                 <div className="form-control">
                   <label className="label">
@@ -155,7 +155,7 @@ export default function CreatePollPage() {
                   </label>
                   <div className="space-y-3">
                     {options.map((option, index) => (
-                      <div key={index} className="flex gap-3">
+                      <div key={index} className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         <input
                           type="text"
                           placeholder={t('option_placeholder', 'Enter option text...')}
@@ -170,6 +170,7 @@ export default function CreatePollPage() {
                             onClick={() => removeOption(index)}
                             variant="danger"
                             size="sm"
+                            className="w-full sm:w-auto"
                           >
                             {t('remove', 'Remove')}
                           </Button>
@@ -179,7 +180,7 @@ export default function CreatePollPage() {
                   </div>
 
                   {/* Add New Option */}
-                  <div className="flex gap-3 mt-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3">
                     <input
                       type="text"
                       placeholder={t('add_new_option_placeholder', 'Add new option...')}
@@ -209,7 +210,7 @@ export default function CreatePollPage() {
                           input.value = "";
                         }
                       }}
-                      className="w-12 h-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center"
+                      className="w-full sm:w-12 h-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center"
                     >
                       +
                     </button>
@@ -223,10 +224,10 @@ export default function CreatePollPage() {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-4 pt-6">
+                <div className="flex gap-4 pt-4 sm:pt-6">
                   <Button
                     type="submit"
-                    className="flex-1"
+                    className="w-full"
                     disabled={loading}
                   >
                     {loading ? (
@@ -237,17 +238,6 @@ export default function CreatePollPage() {
                     ) : (
                       t('create_poll', 'Create Poll')
                     )}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="flex-1"
-                    onClick={() => {
-                      // Save as draft functionality (placeholder)
-                      console.log("Save as draft clicked");
-                    }}
-                  >
-                    {t('save_as_draft', 'Save as Draft')}
                   </Button>
                 </div>
               </form>

@@ -1,104 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { getAuthOptions } from "@/lib/auth";
-import { z } from "zod";
-
-// Force dynamic rendering
-export const dynamic = 'force-dynamic';
-
-// Dynamic import to avoid build-time issues
-async function getPrisma() {
-  try {
-    const { prisma } = await import('@/lib/db-optimized');
-    return prisma;
-  } catch (error) {
-    console.error('Failed to import Prisma client:', error);
-    throw new Error('Database connection failed');
-  }
-}
-
-const createPollSchema = z.object({
-  title: z.string().min(1, "Poll title is required"),
-  description: z.string().optional(),
-  options: z
-    .array(z.string().min(1, "Option text is required"))
-    .min(2, "At least 2 options are required"),
-});
+import { NextResponse } from 'next/server';
+import { dbUtils } from '@/lib/db-optimized';
 
 export async function GET() {
   try {
-    const prisma = await getPrisma();
-    const polls = await prisma.poll.findMany({
-      where: { isActive: true },
-      include: {
-        options: {
-          include: {
-            _count: {
-              select: { votes: true },
-            },
-          },
-        },
-        _count: {
-          select: { votes: true },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    // Use optimized database utility with caching
+    const polls = await dbUtils.findManyPolls(20, 0);
 
-    return NextResponse.json(polls);
+    const response = NextResponse.json(polls);
+
+    // Add caching headers for 30 seconds
+    response.headers.set('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=60');
+    
+    return response;
   } catch (error) {
-    console.error("Error fetching polls:", error);
+    console.error('Error fetching polls:', error);
     return NextResponse.json(
-      { error: "Failed to fetch polls" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const authOptions = await getAuthOptions();
-    const session = await getServerSession(authOptions);
-
-    const body = await request.json();
-    const validatedData = createPollSchema.parse(body);
-
-    const prisma = await getPrisma();
-    const poll = await prisma.poll.create({
-      data: {
-        title: validatedData.title,
-        description: validatedData.description,
-        createdById: session?.user?.id || null, // Allow null for anonymous polls
-        options: {
-          create: validatedData.options.map((text) => ({ text })),
-        },
-      },
-      include: {
-        options: true,
-      },
-    });
-
-    return NextResponse.json(poll, { status: 201 });
-  } catch (error) {
-    // Enhanced error logging
-    try {
-      const authOptions = await getAuthOptions();
-      const session = await getServerSession(authOptions);
-      console.error("Poll creation failed:", {
-        session,
-        error: error instanceof Error ? error.stack : error,
-      });
-    } catch (e) {
-      console.error("Error logging poll creation failure:", e);
-    }
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Validation error", details: error.errors },
-        { status: 400 }
-      );
-    }
-    return NextResponse.json(
-      { error: "Failed to create poll", details: error instanceof Error ? error.message : error },
+      { error: 'Failed to fetch polls' },
       { status: 500 }
     );
   }
