@@ -36,7 +36,7 @@ export default function HomePage() {
       
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
-        <section className="text-center mb-20">
+        <section className="text-center mb-20 animate-fade-in">
           <div className="mb-8">
             <h1 className="text-6xl md:text-7xl font-bold text-center mb-6 leading-relaxed">
               <div className="flex flex-col items-center justify-center gap-2">
@@ -72,10 +72,12 @@ export default function HomePage() {
         </section>
 
         {/* Stats Section */}
-        <Stats />
+        <div className="animate-fade-in animate-fade-in-200">
+          <Stats />
+        </div>
 
         {/* Features Section */}
-        <section className="mb-20">
+        <section className="mb-20 animate-fade-in animate-fade-in-400">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
               Why Choose PollVault?
@@ -102,7 +104,7 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white">
+        <section className="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white animate-fade-in animate-fade-in-400">
           <div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               Ready to Get Started?

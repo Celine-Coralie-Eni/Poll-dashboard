@@ -77,11 +77,26 @@
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.35s ease-out both;
 }
+
+/* Stagger helpers */
+.animate-fade-in-200 { animation-delay: 0.2s; }
+.animate-fade-in-400 { animation-delay: 0.4s; }
 
 .animate-slide-in {
   animation: slideIn 0.3s ease-out;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-200,
+  .animate-fade-in-400,
+  .animate-slide-in,
+  .progress-animate {
+    animation: none !important;
+  }
 }
 
 /* Progress bar animation */
